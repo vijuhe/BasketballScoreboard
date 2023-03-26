@@ -1,0 +1,10 @@
+﻿.bordered {
+    border: solid white;
+    cursor: pointer;
+}
+
+.white-text {
+    color: white;
+    font-size: 23pt;
+    text-align: center;
+}

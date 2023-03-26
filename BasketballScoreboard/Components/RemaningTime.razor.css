@@ -1,0 +1,29 @@
+﻿.container {
+    border: solid white;
+    height: 100%;
+    padding: 5px;
+}
+
+.big-text {
+    font-size: 120pt;
+    font-weight: bolder;
+    text-align: center;
+    cursor: pointer;
+}
+.adjustment-text {
+    text-align: right;
+    font-size: 23pt;
+}
+.adjustment {
+    border: solid white;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 20pt;
+    background-color: dimgrey;
+}
+#time-adjustments {
+    border-top: solid white;
+    padding: 7px;
+    margin: -7px;
+}

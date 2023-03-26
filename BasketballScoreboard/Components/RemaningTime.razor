@@ -1,0 +1,122 @@
+@using System.Timers;
+
+<div class="container">
+    <Buzzer @ref="buzzer" />
+    <div class="row">
+        <div class="col-md-5">
+            <div class="white-text big-text" @onclick="ToggleTimer">
+                @minutes.ToPaddedString()
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="white-text big-text" @onclick="ToggleTimer">:</div>
+        </div>
+        <div class="col-md-5">
+            <div class="white-text big-text" style="@GetSecondStyles()" @onclick="ToggleTimer">
+                @seconds.ToPaddedString()
+            </div>
+        </div>
+    </div>
+
+    <div id="time-adjustments" class="row white-text">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-4 adjustment-text">
+                    MINUTES
+                </div>
+                <div class="col-md-4 adjustment" @onclick="SubtractMinute">
+                    -
+                </div>
+                <div class="col-md-4 adjustment" @onclick="AddMinute">
+                    +
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" />
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-4 adjustment-text">
+                    SECONDS
+                </div>
+                <div class="col-md-4 adjustment" @onclick="SubtractSecond">
+                    -
+                </div> 
+                <div class="col-md-4 adjustment" @onclick="AddSecond">
+                    +
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private byte minutes = 0;
+    private byte seconds = 0;
+    private Timer? timer;
+    private Buzzer? buzzer;
+
+    [Parameter]
+    public EventCallback OnPeriodEnded { get; set; }
+
+    protected override void OnInitialized()
+    {
+        timer = new Timer(1000);
+        timer.AutoReset = true;
+        timer.Enabled = false;
+        timer.Elapsed += SecondPassed;
+    }
+
+    public void ToggleTimer()
+    {
+         if (minutes > 0 || seconds > 0) timer!.Enabled = !timer.Enabled;
+    }
+
+    private string GetSecondStyles()
+    {
+        return minutes == 0 && seconds > 0
+            ? "color: red;"
+            : "";
+    }
+
+    private async void SecondPassed(Object? source, ElapsedEventArgs e)
+    {
+        SubtractSecond();
+        if (minutes == 0 && seconds == 0)
+        {
+            timer!.Enabled = false;
+            buzzer!.Play();
+            await OnPeriodEnded.InvokeAsync();
+        }
+        StateHasChanged();
+    }
+
+    private void SubtractSecond()
+    {
+        if (seconds > 0) seconds--;
+        else if (minutes > 0)
+        {
+            SubtractMinute();
+            seconds = 59;
+        }
+    }
+
+    private void AddSecond()
+    {
+        if (seconds < 59) seconds++;
+        else 
+        {
+            AddMinute();
+            seconds = 0;
+        }
+    }
+
+    private void SubtractMinute()
+    {
+        if (minutes > 0) minutes--;
+    }
+
+    private void AddMinute()
+    {
+        minutes++;
+    }
+}

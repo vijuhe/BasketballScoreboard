@@ -1,0 +1,33 @@
+﻿.title {
+    color: white;
+    font-size: 40pt;
+    font-weight: bold;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.points {
+    color: lawngreen;
+    font-size: 120pt;
+    font-weight: bolder;
+    text-align: center;
+    border: solid white;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.adjustments {
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 5px;
+    border: solid white;
+}
+.adjustment {
+    color: lawngreen;
+    border: solid white;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 20pt;
+    background-color: dimgrey;
+}

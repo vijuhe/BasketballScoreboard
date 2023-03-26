@@ -1,0 +1,39 @@
+<div id="periods" class="row">
+    <div class="col-md-4">
+        PERIOD
+    </div>
+    <div class="col-md-4"/>
+    <div class="col-md-1 clickable" style="@GetBackgroundColor(1)" @onclick="@(_ => currentPeriod = 1)">
+        1
+    </div>
+    <div class="col-md-1 clickable" style="@GetBackgroundColor(2)" @onclick="@(_ => currentPeriod = 2)">
+        2
+    </div>
+    <div class="col-md-1 clickable" style="@GetBackgroundColor(3)" @onclick="@(_ => currentPeriod = 3)">
+        3
+    </div>
+    <div class="col-md-1 clickable" style="@GetBackgroundColor(4)" @onclick="@(_ => currentPeriod = 4)">
+        4
+    </div>
+</div>
+
+@code
+{
+    private byte currentPeriod = 1;
+
+    public void Next()
+    {
+        if (currentPeriod < 4) 
+        {
+            currentPeriod++;
+            StateHasChanged();
+        }
+    }
+
+    private string GetBackgroundColor(byte period)
+    {
+        return period == currentPeriod
+            ? "background-color: red;"
+            : "";
+    }
+}

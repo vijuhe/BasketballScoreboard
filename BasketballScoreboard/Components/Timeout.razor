@@ -1,0 +1,58 @@
+@using System.Timers;
+
+<Buzzer @ref="buzzer" />
+<div class="bordered white-text" @onclick="StartTimeout">
+    @remainingTimeout
+</div>
+
+@code {
+    private const string TimeoutPlaceholder = "TIME OUT";
+    private Buzzer? buzzer;
+    private Timer? timer;
+    private byte minutes = 1;
+    private byte seconds = 0;
+    private string remainingTimeout = TimeoutPlaceholder;
+
+    protected override void OnInitialized()
+    {
+        timer = new Timer(1000);
+        timer.AutoReset = true;
+        timer.Enabled = false;
+        timer.Elapsed += SecondPassed;
+    }
+
+    private void SecondPassed(Object? source, ElapsedEventArgs e)
+    {
+        SubtractSecond();
+        remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
+        if (minutes == 0 && seconds == 0)
+        {
+            timer!.Enabled = false;
+            buzzer!.Play();
+            remainingTimeout = TimeoutPlaceholder;
+            minutes = 1;
+        }
+        StateHasChanged();
+    }
+
+    private void SubtractSecond()
+    {
+        if (seconds > 0) seconds--;
+        else if (minutes > 0)
+        {
+            SubtractMinute();
+            seconds = 59;
+        }
+    }
+
+    private void SubtractMinute()
+    {
+        if (minutes > 0) minutes--;
+    }
+
+    private void StartTimeout()
+    {
+        remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
+        timer!.Enabled = true;
+    }
+}

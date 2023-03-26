@@ -1,0 +1,40 @@
+<div class="title" style="@titleStyle">
+    @title
+</div>
+<div class="points">
+    @points.ToPaddedString()
+</div>
+<div class="row adjustments">
+    <div class="col-md-6 adjustment" @onclick="DecreasePoints">
+        -
+    </div>
+    <div class="col-md-6 adjustment" @onclick="IncreasePoints">
+        +
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public bool IsHomeTeam { get; set; }
+
+    private string? title;
+    private string? titleStyle;
+    private byte points = 0;
+
+    protected override void OnParametersSet()
+    {
+        title = IsHomeTeam ? "HOME" : "AWAY";
+        titleStyle = IsHomeTeam ? "text-align: left;" : "text-align: right;";
+    }
+
+    private void IncreasePoints()
+    {
+        points++;
+    }
+
+    private void DecreasePoints()
+    {
+        if (points > 0) points--;
+    }
+}

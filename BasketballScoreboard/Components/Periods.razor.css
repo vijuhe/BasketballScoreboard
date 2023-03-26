@@ -1,0 +1,10 @@
+﻿#periods {
+    color: white;
+    font-size: 40pt;
+    font-weight: bold;
+    text-align: center;
+    border: solid white;
+}
+.clickable {
+    cursor: pointer;
+}

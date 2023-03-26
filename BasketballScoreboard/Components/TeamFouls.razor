@@ -1,0 +1,36 @@
+<div class="container">
+    <div id="header" class="row" @onclick="@(_ => fouls = 0)">
+        <h2 class="white-text">FOULS</h2>
+    </div>
+
+    <div class="row foul-dot" style="width: 55px; height: 55px; @GetBackgroundColor(5)" @onclick="@(_ => fouls = 5)" />
+    <div class="row foul-dot" style="width: 50px; height: 50px; @GetBackgroundColor(4)" @onclick="@(_ => fouls = 4)" />
+    <div class="row foul-dot" style="width: 45px; height: 45px; @GetBackgroundColor(3)" @onclick="@(_ => fouls = 3)" />
+    <div class="row foul-dot" style="width: 40px; height: 40px; @GetBackgroundColor(2)" @onclick="@(_ => fouls = 2)" />
+    <div class="row foul-dot" style="width: 35px; height: 35px; @GetBackgroundColor(1)" @onclick="@(_ => fouls = 1)" />
+</div>
+
+@code 
+{
+    private byte fouls = 0;
+
+    public void Reset()
+    {
+        fouls = 0;
+        StateHasChanged();
+    }
+
+    private string GetBackgroundColor(byte foulPosition)
+    {
+        if (foulPosition == 5)
+        {
+            return fouls == 5
+                ? "background-color: red;"
+                : "background-color: darkred;";
+        }
+
+        return fouls >= foulPosition
+            ? "background-color: white;"
+            : "background-color: grey;";
+    }
+}

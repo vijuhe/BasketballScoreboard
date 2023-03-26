@@ -1,0 +1,13 @@
+﻿@inject IJSRuntime JSRuntime
+
+<audio id="buzzer">
+    <source src="/buzzer.wav" />
+</audio>
+
+@code 
+{
+    public async void Play()
+    {
+        await JSRuntime.InvokeAsync<string>("playAudio", new object[] { "buzzer" });
+    }
+}

@@ -1,0 +1,10 @@
+﻿.foul-dot {
+    border-radius: 50%;
+    margin: auto;
+    margin-bottom: 7px;
+    cursor: pointer;
+}
+
+#header {
+    cursor: pointer;
+}
