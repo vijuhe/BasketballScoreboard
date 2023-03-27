@@ -27,3 +27,10 @@
     padding: 7px;
     margin: -7px;
 }
+.white-text {
+    color: white;
+}
+
+#remaining-time {
+    outline: none;
+}

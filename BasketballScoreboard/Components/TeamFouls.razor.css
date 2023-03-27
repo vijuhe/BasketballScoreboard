@@ -5,6 +5,9 @@
     cursor: pointer;
 }
 
-#header {
+.title {
+    color: white;
+    font-size: 20pt;
+    text-align: center;
     cursor: pointer;
 }

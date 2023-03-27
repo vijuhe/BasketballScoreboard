@@ -78,12 +78,6 @@ html, body {
 #app {
     height: 100%;
 }
-.white-text {
-    color: white;
-}
-#remaining-time {
-    outline: none;
-}
 #timeoutAndPeriodRow {
     margin-top: 20px;
 }
