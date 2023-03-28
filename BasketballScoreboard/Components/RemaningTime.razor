@@ -3,15 +3,15 @@
 <div class="container">
     <Buzzer @ref="buzzer" />
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-5">
             <div class="white-text big-text" @onclick="ToggleTimer">
                 @minutes.ToPaddedString()
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-2">
             <div class="white-text big-text" @onclick="ToggleTimer">:</div>
         </div>
-        <div class="col-md-5">
+        <div class="col-5">
             <div class="white-text big-text" style="@GetSecondStyles()" @onclick="ToggleTimer">
                 @seconds.ToPaddedString()
             </div>
@@ -19,29 +19,29 @@
     </div>
 
     <div id="time-adjustments" class="row white-text">
-        <div class="col-md-5">
+        <div class="col-5">
             <div class="row">
-                <div class="col-md-4 adjustment-text">
+                <div class="col-4 adjustment-text">
                     MINUTES
                 </div>
-                <div class="col-md-4 adjustment" @onclick="SubtractMinute">
+                <div class="col-4 adjustment" @onclick="SubtractMinute">
                     -
                 </div>
-                <div class="col-md-4 adjustment" @onclick="AddMinute">
+                <div class="col-4 adjustment" @onclick="AddMinute">
                     +
                 </div>
             </div>
         </div>
-        <div class="col-md-2" />
-        <div class="col-md-5">
+        <div class="col-2" />
+        <div class="col-5">
             <div class="row">
-                <div class="col-md-4 adjustment-text">
+                <div class="col-4 adjustment-text">
                     SECONDS
                 </div>
-                <div class="col-md-4 adjustment" @onclick="SubtractSecond">
+                <div class="col-4 adjustment" @onclick="SubtractSecond">
                     -
                 </div> 
-                <div class="col-md-4 adjustment" @onclick="AddSecond">
+                <div class="col-4 adjustment" @onclick="AddSecond">
                     +
                 </div>
             </div>

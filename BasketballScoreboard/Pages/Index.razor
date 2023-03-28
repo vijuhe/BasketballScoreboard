@@ -4,39 +4,39 @@
 <PageTitle>Basketball Scoreboard</PageTitle>
 
 <div class="row">
-    <div class="col-md-1">
+    <div class="col-1">
         <TeamFouls @ref="homeTeamFouls" />
     </div>
-    <div id="remaining-time" tabindex="0" class="col-md-10" @onkeydown="ToggleTimer">
+    <div id="remaining-time" tabindex="0" class="col-10" @onkeydown="ToggleTimer">
         <RemaningTime @ref="remainingTime" OnPeriodEnded="ResetFoulsAndMoveToNexrPeriod" />
     </div>
-    <div class="col-md-1">
+    <div class="col-1">
         <TeamFouls @ref="awayTeamFouls"/>
     </div>
 </div>
 
 <div id="timeoutAndPeriodRow" class="row">
-    <div class="col-md-1" />
-    <div class="col-md-2">
+    <div class="col-1" />
+    <div class="col-2">
         <Timeout />
     </div>
-    <div class="col-md-1" />
-    <div class="col-md-4">
+    <div class="col-1" />
+    <div class="col-4">
         <Periods @ref="periods"/>
     </div>
-    <div class="col-md-1" />
-    <div class="col-md-2">
+    <div class="col-1" />
+    <div class="col-2">
         <Timeout />
     </div>
-    <div class="col-md-1" />
+    <div class="col-1" />
 </div>
 
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-5">
         <TeamScore IsHomeTeam=true />
     </div>
-    <div class="col-md-2" />
-    <div class="col-md-5">
+    <div class="col-2" />
+    <div class="col-5">
         <TeamScore IsHomeTeam=false />
     </div>
 </div>
