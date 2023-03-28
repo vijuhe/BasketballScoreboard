@@ -1,15 +1,19 @@
 @using System.Timers;
 
-<div class="bordered white-text" @onclick="StartTimeout">
+<div class="text" style="@textStyle" @onclick="StartTimeout">
     @remainingTimeout
 </div>
 
 @code {
     private const string TimeoutPlaceholder = "TIME OUT";
+    private const string StylesWhenNoTimeout = "cursor: pointer;";
+    private const string StylesWhenTimeout = "";
+
     private Timer? timer;
     private byte minutes = 1;
     private byte seconds = 0;
     private string remainingTimeout = TimeoutPlaceholder;
+    private string textStyle = StylesWhenNoTimeout;
 
     [Parameter]
     public EventCallback OnTimeoutEnded { get; set; }
@@ -30,6 +34,7 @@
         {
             timer!.Enabled = false;            
             remainingTimeout = TimeoutPlaceholder;
+            textStyle = StylesWhenNoTimeout;
             minutes = 1;
             await OnTimeoutEnded.InvokeAsync();
         }
@@ -53,6 +58,7 @@
 
     private void StartTimeout()
     {
+        textStyle = StylesWhenTimeout;
         remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
         timer!.Enabled = true;
     }
