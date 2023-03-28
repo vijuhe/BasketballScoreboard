@@ -1,7 +1,6 @@
 @using System.Timers;
 
 <div class="container">
-    <Buzzer @ref="buzzer" />
     <div class="row">
         <div class="col-5">
             <div class="white-text big-text" @onclick="ToggleTimer">
@@ -53,7 +52,6 @@
     private byte minutes = 0;
     private byte seconds = 0;
     private Timer? timer;
-    private Buzzer? buzzer;
 
     [Parameter]
     public EventCallback OnPeriodEnded { get; set; }
@@ -84,7 +82,6 @@
         if (minutes == 0 && seconds == 0)
         {
             timer!.Enabled = false;
-            buzzer!.Play();
             await OnPeriodEnded.InvokeAsync();
         }
         StateHasChanged();

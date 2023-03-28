@@ -3,6 +3,8 @@
 
 <PageTitle>Basketball Scoreboard</PageTitle>
 
+<Buzzer @ref="buzzer" />
+
 <div class="row">
     <div class="col-1">
         <TeamFouls @ref="homeTeamFouls" />
@@ -18,7 +20,7 @@
 <div id="timeoutAndPeriodRow" class="row">
     <div class="col-1" />
     <div class="col-2">
-        <Timeout />
+        <Timeout OnTimeoutEnded="PlayBuzzer" />
     </div>
     <div class="col-1" />
     <div class="col-4">
@@ -26,7 +28,7 @@
     </div>
     <div class="col-1" />
     <div class="col-2">
-        <Timeout />
+        <Timeout OnTimeoutEnded="PlayBuzzer" />
     </div>
     <div class="col-1" />
 </div>
@@ -47,14 +49,21 @@
     private TeamFouls? homeTeamFouls;
     private TeamFouls? awayTeamFouls;
     private Periods? periods;
+    private Buzzer? buzzer;
 
     private void ToggleTimer(KeyboardEventArgs args)
     {
         remainingTime?.ToggleTimer();
     }
 
+    private void PlayBuzzer()
+    {
+        buzzer?.Play();
+    }
+
     private void ResetFoulsAndMoveToNexrPeriod()
     {
+        PlayBuzzer();
         homeTeamFouls?.Reset();
         awayTeamFouls?.Reset();
         periods?.Next();

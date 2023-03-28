@@ -1,17 +1,18 @@
 @using System.Timers;
 
-<Buzzer @ref="buzzer" />
 <div class="bordered white-text" @onclick="StartTimeout">
     @remainingTimeout
 </div>
 
 @code {
     private const string TimeoutPlaceholder = "TIME OUT";
-    private Buzzer? buzzer;
     private Timer? timer;
     private byte minutes = 1;
     private byte seconds = 0;
     private string remainingTimeout = TimeoutPlaceholder;
+
+    [Parameter]
+    public EventCallback OnTimeoutEnded { get; set; }
 
     protected override void OnInitialized()
     {
@@ -21,16 +22,16 @@
         timer.Elapsed += SecondPassed;
     }
 
-    private void SecondPassed(Object? source, ElapsedEventArgs e)
+    private async void SecondPassed(Object? source, ElapsedEventArgs e)
     {
         SubtractSecond();
         remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
         if (minutes == 0 && seconds == 0)
         {
-            timer!.Enabled = false;
-            buzzer!.Play();
+            timer!.Enabled = false;            
             remainingTimeout = TimeoutPlaceholder;
             minutes = 1;
+            await OnTimeoutEnded.InvokeAsync();
         }
         StateHasChanged();
     }

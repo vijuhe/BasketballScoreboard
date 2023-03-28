@@ -1,3 +1,4 @@
 function playAudio(audioElementId) {
-    document.getElementById(audioElementId).play();
+    const audioElement = document.getElementById(audioElementId);
+    if (audioElement.paused) audioElement.play();
 }
