@@ -28,6 +28,12 @@
         titleStyle = IsHomeTeam ? "text-align: left;" : "text-align: right;";
     }
 
+    public void Reset()
+    {
+        points = 0;
+        StateHasChanged();
+    }
+    
     private void IncreasePoints()
     {
         points++;

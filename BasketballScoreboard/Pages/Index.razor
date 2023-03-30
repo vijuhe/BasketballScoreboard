@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BasketballScoreboard.Components
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Basketball Scoreboard</PageTitle>
 
@@ -10,7 +11,7 @@
         <TeamFouls @ref="homeTeamFouls" />
     </div>
     <div id="remaining-time" tabindex="0" class="col-10" @onkeydown="ToggleTimer">
-        <RemaningTime @ref="remainingTime" OnPeriodEnded="ResetFoulsAndMoveToNexrPeriod" />
+        <RemaningTime @ref="remainingTime" OnPeriodEnded="MoveToNextPeriodOrNewGame" />
     </div>
     <div class="col-1">
         <TeamFouls @ref="awayTeamFouls"/>
@@ -35,11 +36,11 @@
 
 <div class="row">
     <div class="col-5">
-        <TeamScore IsHomeTeam=true />
+        <TeamScore IsHomeTeam=true @ref="homeTeamScore" />
     </div>
     <div class="col-2" />
     <div class="col-5">
-        <TeamScore IsHomeTeam=false />
+        <TeamScore IsHomeTeam=false @ref="awayTeamScore" />
     </div>
 </div>
 
@@ -50,22 +51,40 @@
     private TeamFouls? awayTeamFouls;
     private Periods? periods;
     private Buzzer? buzzer;
+    private TeamScore? homeTeamScore;
+    private TeamScore? awayTeamScore;
 
     private void ToggleTimer(KeyboardEventArgs args)
     {
         remainingTime?.ToggleTimer();
     }
 
-    private void PlayBuzzer()
+    private async void PlayBuzzer()
     {
-        buzzer?.Play();
+        await buzzer!.Play();
     }
 
-    private void ResetFoulsAndMoveToNexrPeriod()
+    private async void MoveToNextPeriodOrNewGame()
     {
+        string question = periods!.IsLastPeriod
+            ? "Game ended.\nDo you want to get ready to start a new game?"
+            : "Period ended.\nDo you want to get ready to start the next period?";
         PlayBuzzer();
-        homeTeamFouls?.Reset();
-        awayTeamFouls?.Reset();
-        periods?.Next();
+        await Task.Delay(5000);
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("ask", question);
+        if (confirmed)
+        {
+            homeTeamFouls?.Reset();
+            awayTeamFouls?.Reset();
+            remainingTime?.Reset();
+
+            if (periods.IsLastPeriod) 
+            {
+                periods.Reset();
+                homeTeamScore?.Reset();
+                awayTeamScore?.Reset();
+            }
+            else periods.Next();
+        }
     }
 }

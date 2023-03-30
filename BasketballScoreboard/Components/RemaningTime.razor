@@ -51,6 +51,7 @@
 @code {
     private byte minutes = 0;
     private byte seconds = 0;
+    private byte? startingMinutes;
     private Timer? timer;
 
     [Parameter]
@@ -66,7 +67,15 @@
 
     public void ToggleTimer()
     {
-         if (minutes > 0 || seconds > 0) timer!.Enabled = !timer.Enabled;
+        if (!timer!.Enabled && !startingMinutes.HasValue) startingMinutes = minutes;
+        if (minutes > 0 || seconds > 0) timer!.Enabled = !timer.Enabled;
+    }
+
+    public void Reset()
+    {
+        minutes = startingMinutes.HasValue ? startingMinutes.Value : (byte) 0;
+        seconds = 0;
+        StateHasChanged();
     }
 
     private string GetSecondStyles()

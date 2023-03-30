@@ -6,8 +6,8 @@
 
 @code 
 {
-    public async void Play()
+    public async Task Play()
     {
-        await JSRuntime.InvokeAsync<string>("playAudio", new object[] { "buzzer" });
+        await JSRuntime.InvokeVoidAsync("playAudio", "buzzer");
     }
 }
