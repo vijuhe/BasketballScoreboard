@@ -128,25 +128,26 @@
         if (minutes > 0)
         {
             minutes--;
-            if (startingMinutes.HasValue)
-            {
-                SetOngoingMinute();
-            }
+            SetOngoingMinute();
         }
     }
 
     private void SetOngoingMinute()
     {
-        string remainingMinutes = (startingMinutes!.Value - minutes).ToString();
-        string minutesPostfix = "th";
-        if (remainingMinutes.EndsWith("1") && !remainingMinutes.EndsWith("11")) minutesPostfix = "st";
-        if (remainingMinutes.EndsWith("2") && !remainingMinutes.EndsWith("12")) minutesPostfix = "nd";
-        if (remainingMinutes.EndsWith("3") && !remainingMinutes.EndsWith("13")) minutesPostfix = "rd";
-        ongoingMinute = $"{remainingMinutes}{minutesPostfix} MINUTE";
+        if (startingMinutes.HasValue)
+        {
+            string remainingMinutes = (startingMinutes.Value - minutes).ToString();
+            string minutesPostfix = "th";
+            if (remainingMinutes.EndsWith("1") && !remainingMinutes.EndsWith("11")) minutesPostfix = "st";
+            if (remainingMinutes.EndsWith("2") && !remainingMinutes.EndsWith("12")) minutesPostfix = "nd";
+            if (remainingMinutes.EndsWith("3") && !remainingMinutes.EndsWith("13")) minutesPostfix = "rd";
+            ongoingMinute = $"{remainingMinutes}{minutesPostfix} MINUTE";
+        }
     }
 
     private void AddMinute()
     {
         minutes++;
+        SetOngoingMinute();
     }
 }
