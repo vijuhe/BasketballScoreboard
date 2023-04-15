@@ -1,6 +1,6 @@
 @using System.Timers;
 
-<div class="text" style="@textStyle" @onclick="StartTimeout">
+<div class="text" style="@textStyle" @onmousedown="StartTimeout" @onmousedown:preventDefault="true">
     @remainingTimeout
 </div>
 

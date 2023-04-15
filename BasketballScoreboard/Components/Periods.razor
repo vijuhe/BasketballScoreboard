@@ -3,16 +3,16 @@
         PERIOD
     </div>
     <div class="col-4"/>
-    <div class="col-1 clickable" style="@GetBackgroundColor(1)" @onclick="@(_ => currentPeriod = 1)">
+    <div class="col-1 clickable" style="@GetBackgroundColor(1)" @onmousedown="@(_ => currentPeriod = 1)" @onmousedown:preventDefault="true">
         1
     </div>
-    <div class="col-1 clickable" style="@GetBackgroundColor(2)" @onclick="@(_ => currentPeriod = 2)">
+    <div class="col-1 clickable" style="@GetBackgroundColor(2)" @onmousedown="@(_ => currentPeriod = 2)" @onmousedown:preventDefault="true">
         2
     </div>
-    <div class="col-1 clickable" style="@GetBackgroundColor(3)" @onclick="@(_ => currentPeriod = 3)">
+    <div class="col-1 clickable" style="@GetBackgroundColor(3)" @onmousedown="@(_ => currentPeriod = 3)" @onmousedown:preventDefault="true">
         3
     </div>
-    <div class="col-1 clickable" style="@GetBackgroundColor(4)" @onclick="@(_ => currentPeriod = 4)">
+    <div class="col-1 clickable" style="@GetBackgroundColor(4)" @onmousedown="@(_ => currentPeriod = 4)" @onmousedown:preventDefault="true">
         4
     </div>
 </div>

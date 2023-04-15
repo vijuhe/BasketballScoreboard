@@ -2,11 +2,11 @@
     FOULS
 </div>
 
-<div class="foul-dot" style="width: 55px; height: 55px; @GetBackgroundColor(5)" @onclick="@(_ => fouls = 5)" />
-<div class="foul-dot" style="width: 50px; height: 50px; @GetBackgroundColor(4)" @onclick="@(_ => fouls = 4)" />
-<div class="foul-dot" style="width: 45px; height: 45px; @GetBackgroundColor(3)" @onclick="@(_ => fouls = 3)" />
-<div class="foul-dot" style="width: 40px; height: 40px; @GetBackgroundColor(2)" @onclick="@(_ => fouls = 2)" />
-<div class="foul-dot" style="width: 35px; height: 35px; @GetBackgroundColor(1)" @onclick="@(_ => fouls = 1)" />
+<div class="foul-dot" style="width: 55px; height: 55px; @GetBackgroundColor(5)" @onmousedown="@(_ => fouls = 5)" @onmousedown:preventDefault="true" />
+<div class="foul-dot" style="width: 50px; height: 50px; @GetBackgroundColor(4)" @onmousedown="@(_ => fouls = 4)" @onmousedown:preventDefault="true" />
+<div class="foul-dot" style="width: 45px; height: 45px; @GetBackgroundColor(3)" @onmousedown="@(_ => fouls = 3)" @onmousedown:preventDefault="true" />
+<div class="foul-dot" style="width: 40px; height: 40px; @GetBackgroundColor(2)" @onmousedown="@(_ => fouls = 2)" @onmousedown:preventDefault="true" />
+<div class="foul-dot" style="width: 35px; height: 35px; @GetBackgroundColor(1)" @onmousedown="@(_ => fouls = 1)" @onmousedown:preventDefault="true" />
 
 @code 
 {

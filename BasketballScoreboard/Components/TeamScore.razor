@@ -5,10 +5,10 @@
     @points.ToPaddedString()
 </div>
 <div class="row adjustments">
-    <div class="col adjustment" @onclick="DecreasePoints">
+    <div class="col adjustment" @onmousedown="DecreasePoints" @onmousedown:preventDefault="true">
         -
     </div>
-    <div class="col adjustment" @onclick="IncreasePoints">
+    <div class="col adjustment" @onmousedown="IncreasePoints" @onmousedown:preventDefault="true">
         +
     </div>
 </div>
