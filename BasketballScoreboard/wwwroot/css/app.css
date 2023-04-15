@@ -78,6 +78,9 @@ html, body {
 #app {
     height: 100%;
 }
-#timeoutAndPeriodRow {
+#timeout-and-period-row {
     margin-top: 20px;
+}
+#remaining-time {
+    outline: none;
 }
