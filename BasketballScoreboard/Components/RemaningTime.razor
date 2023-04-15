@@ -9,6 +9,7 @@
         </div>
         <div class="col-2">
             <div class="white-text big-text" @onclick="ToggleTimer">:</div>
+            <div id="ongoing-minute">@ongoingMinute</div>
         </div>
         <div class="col-5">
             <div class="white-text big-text" style="@GetSecondStyles()" @onclick="ToggleTimer">
@@ -51,6 +52,7 @@
 @code {
     private byte minutes = 0;
     private byte seconds = 0;
+    private string ongoingMinute = "1st MINUTE";
     private byte? startingMinutes;
     private Timer? timer;
 
@@ -75,6 +77,7 @@
     {
         minutes = startingMinutes.HasValue ? startingMinutes.Value : (byte) 0;
         seconds = 0;
+        ongoingMinute = "1st MINUTE";
         StateHasChanged();
     }
 
@@ -118,7 +121,24 @@
 
     private void SubtractMinute()
     {
-        if (minutes > 0) minutes--;
+        if (minutes > 0)
+        {
+            minutes--;
+            if (startingMinutes.HasValue)
+            {
+                SetOngoingMinute();
+            }
+        }
+    }
+
+    private void SetOngoingMinute()
+    {
+        string remainingMinutes = (startingMinutes!.Value - minutes).ToString();
+        string minutesPostfix = "th";
+        if (remainingMinutes.EndsWith("1") && !remainingMinutes.EndsWith("11")) minutesPostfix = "st";
+        if (remainingMinutes.EndsWith("2") && !remainingMinutes.EndsWith("12")) minutesPostfix = "nd";
+        if (remainingMinutes.EndsWith("3") && !remainingMinutes.EndsWith("13")) minutesPostfix = "rd";
+        ongoingMinute = $"{remainingMinutes}{minutesPostfix} MINUTE";
     }
 
     private void AddMinute()

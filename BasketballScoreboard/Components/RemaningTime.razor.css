@@ -34,3 +34,8 @@
 #remaining-time {
     outline: none;
 }
+#ongoing-minute {
+    color: white;
+    text-align: center;
+    font-size: 24pt;
+}
