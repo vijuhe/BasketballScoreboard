@@ -8,7 +8,6 @@
     font-size: 120pt;
     font-weight: bolder;
     text-align: center;
-    cursor: pointer;
 }
 .adjustment-text {
     text-align: right;
@@ -30,7 +29,9 @@
 .white-text {
     color: white;
 }
-
+.clickable {
+    cursor: pointer;
+}
 #remaining-time {
     outline: none;
 }
