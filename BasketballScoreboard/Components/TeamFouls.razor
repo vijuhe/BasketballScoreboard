@@ -1,4 +1,4 @@
-<div class="title" @onclick="@(_ => fouls = 0)">
+<div class="title" @onmousedown="@(_ => fouls = 0)" @onmousedown:preventDefault="true">
     FOULS
 </div>
 
