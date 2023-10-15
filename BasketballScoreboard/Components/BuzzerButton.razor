@@ -1,0 +1,17 @@
+﻿<div class="row">
+    <div class="col-md-5" />
+    <div id="buzzer-container" class="col-md-2" @onmousedown="Clicked" @onmousedown:preventDefault="true">
+        <img src="buzzer.png" alt="Buzzer" />
+    </div>
+    <div class="col-md-5" />
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private async void Clicked()
+    {
+        await OnClick.InvokeAsync();
+    }
+}
