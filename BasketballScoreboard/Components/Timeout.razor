@@ -1,19 +1,16 @@
 @using System.Timers;
 
-<div class="text" style="@textStyle" @onmousedown="StartTimeout" @onmousedown:preventDefault="true">
+<div class="text" @onmousedown="ToggleTimeout" @onmousedown:preventDefault="true">
     @remainingTimeout
 </div>
 
 @code {
     private const string TimeoutPlaceholder = "TIME OUT";
-    private const string StylesWhenNoTimeout = "cursor: pointer;";
-    private const string StylesWhenTimeout = "";
 
     private Timer? timer;
     private byte minutes = 1;
     private byte seconds = 0;
     private string remainingTimeout = TimeoutPlaceholder;
-    private string textStyle = StylesWhenNoTimeout;
 
     [Parameter]
     public EventCallback OnTimeoutEnded { get; set; }
@@ -32,13 +29,18 @@
         remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
         if (minutes == 0 && seconds == 0)
         {
-            timer!.Enabled = false;            
-            remainingTimeout = TimeoutPlaceholder;
-            textStyle = StylesWhenNoTimeout;
-            minutes = 1;
+            timer!.Enabled = false;
+            ResetTimeout();
             await OnTimeoutEnded.InvokeAsync();
         }
         StateHasChanged();
+    }
+
+    private void ResetTimeout()
+    {
+        remainingTimeout = TimeoutPlaceholder;
+        minutes = 1;
+        seconds = 0;
     }
 
     private void SubtractSecond()
@@ -56,10 +58,10 @@
         if (minutes > 0) minutes--;
     }
 
-    private void StartTimeout()
+    private void ToggleTimeout()
     {
-        textStyle = StylesWhenTimeout;
-        remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
-        timer!.Enabled = true;
+        timer!.Enabled = !timer.Enabled;
+        if (timer.Enabled) remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
+        else ResetTimeout();
     }
 }
