@@ -11,7 +11,7 @@
         <TeamFouls @ref="homeTeamFouls" />
     </div>
     <div id="remaining-time" @ref="remainingTimeContainer" tabindex="0" class="col-10" @onkeydown="ToggleTimer">
-        <RemaningTime @ref="remainingTime" OnPeriodEnded="MoveToNextPeriodOrNewGame" />
+        <RemaningTime @ref="remainingTime" OnPeriodEnded="MoveToNextPeriodOrNewGameAfterPeriod" OnIntermissionEnded="MoveToNextPeriodAfterIntermission" />
     </div>
     <div class="col-1">
         <TeamFouls @ref="awayTeamFouls"/>
@@ -67,28 +67,42 @@
         await buzzer!.Play();
     }
 
-    private async void MoveToNextPeriodOrNewGame()
+    private void MoveToNextPeriodAfterIntermission()
+    {
+        PlayBuzzer();
+        remainingTime?.Reset();
+    }
+
+    private async void MoveToNextPeriodOrNewGameAfterPeriod()
     {
         string question = periods!.IsLastPeriod
             ? "Game ended.\nDo you want to get ready to start a new game?"
-            : "Period ended.\nDo you want to get ready to start the next period?";
+            : "Period ended.\nDo you want to start the intermission?\nCancelling moves to the next period without intermission.";
         PlayBuzzer();
-        await Task.Delay(5000);
+        await Task.Delay(3000);
         bool confirmed = await JSRuntime.InvokeAsync<bool>("ask", question);
-        if (confirmed)
-        {
-            homeTeamFouls?.Reset();
-            awayTeamFouls?.Reset();
-            remainingTime?.Reset();
 
-            if (periods.IsLastPeriod) 
+        if (periods.IsLastPeriod)
+        {
+            if (confirmed)
             {
+                homeTeamFouls?.Reset();
+                awayTeamFouls?.Reset();
+                remainingTime?.Reset();
                 periods.Reset();
                 homeTeamScore?.Reset();
                 awayTeamScore?.Reset();
             }
-            else periods.Next();
-            remainingTimeContainer?.FocusAsync();
         }
+        else
+        {
+            if (confirmed) remainingTime?.StartIntermission();
+            else remainingTime?.Reset();
+            homeTeamFouls?.Reset();
+            awayTeamFouls?.Reset();
+            periods.Next();
+        }
+
+        remainingTimeContainer?.FocusAsync();
     }
 }

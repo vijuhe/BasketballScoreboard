@@ -54,14 +54,19 @@
 </div>
 
 @code {
+    private const byte intermissionLengthInMinutes = 2;
     private byte minutes = 0;
     private byte seconds = 0;
     private string ongoingMinute = "1st MINUTE";
     private byte? startingMinutes;
     private Timer? timer;
+    private bool intermissionOngoing;
 
     [Parameter]
     public EventCallback OnPeriodEnded { get; set; }
+
+    [Parameter]
+    public EventCallback OnIntermissionEnded { get; set; }
 
     protected override void OnInitialized()
     {
@@ -82,12 +87,22 @@
         minutes = startingMinutes.HasValue ? startingMinutes.Value : (byte) 0;
         seconds = 0;
         ongoingMinute = "1st MINUTE";
+        intermissionOngoing = false;
         StateHasChanged();
+    }
+
+    public void StartIntermission()
+    {
+        minutes = intermissionLengthInMinutes;
+        seconds = 0;
+        ongoingMinute = "1st MINUTE";
+        intermissionOngoing = true;
+        ToggleTimer();
     }
 
     private string GetSecondStyles()
     {
-        return minutes == 0 && seconds > 0
+        return minutes == 0 && seconds > 0 && !intermissionOngoing
             ? "color: red;"
             : "";
     }
@@ -98,7 +113,8 @@
         if (minutes == 0 && seconds == 0)
         {
             timer!.Enabled = false;
-            await OnPeriodEnded.InvokeAsync();
+            if (intermissionOngoing) await OnIntermissionEnded.InvokeAsync();
+            else await OnPeriodEnded.InvokeAsync();
         }
         StateHasChanged();
     }
@@ -128,7 +144,7 @@
         if (minutes > 0)
         {
             minutes--;
-            SetOngoingMinute();
+            if (!intermissionOngoing) SetOngoingMinute();
         }
     }
 
@@ -149,6 +165,6 @@
     private void AddMinute()
     {
         minutes++;
-        SetOngoingMinute();
+        if (!intermissionOngoing) SetOngoingMinute();
     }
 }
