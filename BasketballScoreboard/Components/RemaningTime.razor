@@ -55,12 +55,14 @@
 
 @code {
     private const byte intermissionLengthInMinutes = 2;
+    private const byte overtimeLengthInMinutes = 5;
     private byte minutes = 0;
     private byte seconds = 0;
     private string ongoingMinute = "1st MINUTE";
     private byte? startingMinutes;
     private Timer? timer;
-    private bool intermissionOngoing;
+    private bool isIntermission;
+    private bool isOvertime;
 
     [Parameter]
     public EventCallback OnPeriodEnded { get; set; }
@@ -87,7 +89,8 @@
         minutes = startingMinutes.HasValue ? startingMinutes.Value : (byte) 0;
         seconds = 0;
         ongoingMinute = "1st MINUTE";
-        intermissionOngoing = false;
+        isIntermission = false;
+        isOvertime = false;
         StateHasChanged();
     }
 
@@ -96,13 +99,24 @@
         minutes = intermissionLengthInMinutes;
         seconds = 0;
         ongoingMinute = "1st MINUTE";
-        intermissionOngoing = true;
+        isIntermission = true;
+        isOvertime = false;
         ToggleTimer();
+    }
+
+    public void Overtime()
+    {
+        minutes = overtimeLengthInMinutes;
+        seconds = 0;
+        ongoingMinute = "1st MINUTE";
+        isIntermission = false;
+        isOvertime = true;
+        StateHasChanged();
     }
 
     private string GetSecondStyles()
     {
-        return minutes == 0 && seconds > 0 && !intermissionOngoing
+        return minutes == 0 && seconds > 0 && !isIntermission
             ? "color: red;"
             : "";
     }
@@ -113,7 +127,7 @@
         if (minutes == 0 && seconds == 0)
         {
             timer!.Enabled = false;
-            if (intermissionOngoing) await OnIntermissionEnded.InvokeAsync();
+            if (isIntermission) await OnIntermissionEnded.InvokeAsync();
             else await OnPeriodEnded.InvokeAsync();
         }
         StateHasChanged();
@@ -144,27 +158,30 @@
         if (minutes > 0)
         {
             minutes--;
-            if (!intermissionOngoing) SetOngoingMinute();
+            if (!isIntermission) SetOngoingMinute();
         }
     }
 
     private void SetOngoingMinute()
     {
-        if (startingMinutes.HasValue)
+        int? remainingMinutes = null;
+        if (isOvertime) remainingMinutes = overtimeLengthInMinutes - minutes;
+        else if (startingMinutes.HasValue) remainingMinutes = startingMinutes.Value - minutes;
+
+        if (remainingMinutes.HasValue)
         {
-            int remainingMinutes = startingMinutes.Value - minutes;
-            string remainingMinutesText = remainingMinutes.ToString();
+            string remainingMinutesText = remainingMinutes.Value.ToString();
             string minutesPostfix = "th";
             if (remainingMinutesText.EndsWith("1") && !remainingMinutesText.EndsWith("11")) minutesPostfix = "st";
             if (remainingMinutesText.EndsWith("2") && !remainingMinutesText.EndsWith("12")) minutesPostfix = "nd";
             if (remainingMinutesText.EndsWith("3") && !remainingMinutesText.EndsWith("13")) minutesPostfix = "rd";
-            ongoingMinute = remainingMinutes > 0 ? $"{remainingMinutesText}{minutesPostfix} MINUTE" : "1st MINUTE";
+            ongoingMinute = remainingMinutes.Value > 0 ? $"{remainingMinutesText}{minutesPostfix} MINUTE" : "1st MINUTE";
         }
     }
 
     private void AddMinute()
     {
         minutes++;
-        if (!intermissionOngoing) SetOngoingMinute();
+        if (!isIntermission) SetOngoingMinute();
     }
 }

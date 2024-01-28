@@ -75,9 +75,15 @@
 
     private async void MoveToNextPeriodOrNewGameAfterPeriod()
     {
-        string question = periods!.IsLastPeriod
-            ? "Game ended.\nDo you want to get ready to start a new game?"
-            : "Period ended.\nDo you want to start the intermission?\nCancelling moves to the next period without intermission.";
+        string question = "";
+        if (periods!.IsLastPeriod)
+        {
+            question = IsGameTied()
+                ? "Game is tied.\nDo you want to start overtime?"
+                : "Game ended.\nDo you want to get ready to start a new game?";
+        }
+        else question = "Period ended.\nDo you want to start the intermission?\nCancelling moves to the next period without intermission.";
+
         PlayBuzzer();
         await Task.Delay(3000);
         bool confirmed = await JSRuntime.InvokeAsync<bool>("ask", question);
@@ -88,10 +94,18 @@
             {
                 homeTeamFouls?.Reset();
                 awayTeamFouls?.Reset();
-                remainingTime?.Reset();
-                periods.Reset();
-                homeTeamScore?.Reset();
-                awayTeamScore?.Reset();
+                if (IsGameTied())
+                {
+                    remainingTime?.Overtime();
+                    periods.Next();
+                }
+                else
+                {
+                    remainingTime?.Reset();
+                    periods.Reset();
+                    homeTeamScore?.Reset();
+                    awayTeamScore?.Reset();
+                }
             }
         }
         else
@@ -104,5 +118,10 @@
         }
 
         remainingTimeContainer?.FocusAsync();
+    }
+
+    private bool IsGameTied()
+    {
+        return homeTeamScore?.Points == awayTeamScore?.Points;
     }
 }

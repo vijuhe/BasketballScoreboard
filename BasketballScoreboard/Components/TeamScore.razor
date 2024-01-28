@@ -2,7 +2,7 @@
     @title
 </div>
 <div class="points">
-    @points.ToPaddedString()
+    @Points.ToPaddedString()
 </div>
 <div class="row adjustments">
     <div class="col adjustment" @onmousedown="DecreasePoints" @onmousedown:preventDefault="true">
@@ -20,7 +20,6 @@
 
     private string? title;
     private string? titleStyle;
-    private byte points = 0;
 
     protected override void OnParametersSet()
     {
@@ -28,19 +27,21 @@
         titleStyle = IsHomeTeam ? "text-align: left;" : "text-align: right;";
     }
 
+    public byte Points { get; private set; } = 0;
+
     public void Reset()
     {
-        points = 0;
+        Points = 0;
         StateHasChanged();
     }
     
     private void IncreasePoints()
     {
-        points++;
+        Points++;
     }
 
     private void DecreasePoints()
     {
-        if (points > 0) points--;
+        if (Points > 0) Points--;
     }
 }

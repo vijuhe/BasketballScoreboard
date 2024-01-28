@@ -2,7 +2,7 @@
     <div class="col-4">
         PERIOD
     </div>
-    <div class="col-4"/>
+    <div class="col-3"/>
     <div class="col-1 clickable" style="@GetBackgroundColor(1)" @onmousedown="@(_ => currentPeriod = 1)" @onmousedown:preventDefault="true">
         1
     </div>
@@ -15,6 +15,9 @@
     <div class="col-1 clickable" style="@GetBackgroundColor(4)" @onmousedown="@(_ => currentPeriod = 4)" @onmousedown:preventDefault="true">
         4
     </div>
+    <div class="col-1 clickable" style="font-size: 9pt; padding-top: 17px; @GetBackgroundColor(5)" @onmousedown="@(_ => currentPeriod = 5)" @onmousedown:preventDefault="true">
+        OT
+    </div>
 </div>
 
 @code
@@ -23,7 +26,7 @@
 
     public void Next()
     {
-        if (currentPeriod < 4) 
+        if (currentPeriod < 5) 
         {
             currentPeriod++;
             StateHasChanged();
@@ -36,7 +39,7 @@
         StateHasChanged();
     }
 
-    public bool IsLastPeriod => currentPeriod == 4;
+    public bool IsLastPeriod => currentPeriod >= 4;
 
     private string GetBackgroundColor(byte period)
     {
