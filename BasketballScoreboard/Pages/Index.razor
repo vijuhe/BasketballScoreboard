@@ -70,7 +70,8 @@
     private void MoveToNextPeriodAfterIntermission()
     {
         PlayBuzzer();
-        remainingTime?.Reset();
+        remainingTime!.Reset();
+        periods!.Next();
     }
 
     private async void MoveToNextPeriodOrNewGameAfterPeriod()
@@ -111,10 +112,13 @@
         else
         {
             if (confirmed) remainingTime?.StartIntermission();
-            else remainingTime?.Reset();
+            else 
+            {
+                remainingTime?.Reset();
+                periods.Next();
+            }
             homeTeamFouls?.Reset();
             awayTeamFouls?.Reset();
-            periods.Next();
         }
 
         remainingTimeContainer?.FocusAsync();
