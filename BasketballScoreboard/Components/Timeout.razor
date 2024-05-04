@@ -15,6 +15,9 @@
     [Parameter]
     public EventCallback OnTimeoutEnded { get; set; }
 
+    [Parameter]
+    public EventCallback OnTimeoutAboutToEnd { get; set; }
+
     protected override void OnInitialized()
     {
         timer = new Timer(1000);
@@ -27,7 +30,8 @@
     {
         SubtractSecond();
         remainingTimeout = $"{minutes.ToPaddedString()}:{seconds.ToPaddedString()}";
-        if (minutes == 0 && seconds == 0)
+        if (minutes == 0 && seconds == 10) await OnTimeoutAboutToEnd.InvokeAsync();
+        else if (minutes == 0 && seconds == 0)
         {
             timer!.Enabled = false;
             ResetTimeout();
