@@ -114,6 +114,15 @@
         StateHasChanged();
     }
 
+    public void CancelIntermission()
+    {
+        if (isIntermission)
+        {
+            if (timer!.Enabled) ToggleTimer();
+            Reset();
+        }
+    }
+
     private string GetSecondStyles()
     {
         return minutes == 0 && seconds > 0 && !isIntermission

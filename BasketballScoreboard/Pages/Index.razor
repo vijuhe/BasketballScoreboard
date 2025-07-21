@@ -25,7 +25,7 @@
     </div>
     <div class="col-1" />
     <div class="col-4">
-        <Periods @ref="periods"/>
+        <Periods @ref="periods" OnPeriodManuallyChanged="CancelIntermission" />
     </div>
     <div class="col-1" />
     <div class="col-2">
@@ -48,36 +48,36 @@
 
 @code
 {
-    private RemaningTime? remainingTime;
-    private TeamFouls? homeTeamFouls;
-    private TeamFouls? awayTeamFouls;
-    private Periods? periods;
-    private Buzzer? buzzer;
-    private TeamScore? homeTeamScore;
-    private TeamScore? awayTeamScore;
-    private ElementReference? remainingTimeContainer;
+    private RemaningTime remainingTime = default!;
+    private TeamFouls homeTeamFouls = default!;
+    private TeamFouls awayTeamFouls = default!;
+    private Periods periods = default!;
+    private Buzzer buzzer = default!;
+    private TeamScore homeTeamScore = default!;
+    private TeamScore awayTeamScore = default!;
+    private ElementReference remainingTimeContainer = default!;
 
     private void ToggleTimer(KeyboardEventArgs args)
     {
-        remainingTime?.ToggleTimer();
+        remainingTime.ToggleTimer();
     }
 
     private async void PlayBuzzer()
     {
-        await buzzer!.Play();
+        await buzzer.Play();
     }
 
     private void MoveToNextPeriodAfterIntermission()
     {
         PlayBuzzer();
-        remainingTime!.Reset();
-        periods!.Next();
+        remainingTime.Reset();
+        periods.Next();
     }
 
     private async void MoveToNextPeriodOrNewGameAfterPeriod()
     {
         string question = "";
-        if (periods!.IsLastPeriod)
+        if (periods.IsLastPeriod)
         {
             question = IsGameTied()
                 ? "Game is tied.\nDo you want to start overtime?"
@@ -93,19 +93,19 @@
         {
             if (confirmed)
             {
-                homeTeamFouls?.Reset();
-                awayTeamFouls?.Reset();
+                homeTeamFouls.Reset();
+                awayTeamFouls.Reset();
                 if (IsGameTied())
                 {
-                    remainingTime?.Overtime();
+                    remainingTime.Overtime();
                     periods.Next();
                 }
                 else
                 {
-                    remainingTime?.Reset();
+                    remainingTime.Reset();
                     periods.Reset();
-                    homeTeamScore?.Reset();
-                    awayTeamScore?.Reset();
+                    homeTeamScore.Reset();
+                    awayTeamScore.Reset();
                 }
             }
         }
@@ -114,18 +114,23 @@
             if (confirmed) remainingTime?.StartIntermission();
             else 
             {
-                remainingTime?.Reset();
+                remainingTime.Reset();
                 periods.Next();
             }
-            homeTeamFouls?.Reset();
-            awayTeamFouls?.Reset();
+            homeTeamFouls.Reset();
+            awayTeamFouls.Reset();
         }
 
-        remainingTimeContainer?.FocusAsync();
+        remainingTimeContainer.FocusAsync();
     }
 
     private bool IsGameTied()
     {
-        return homeTeamScore?.Points == awayTeamScore?.Points;
+        return homeTeamScore.Points == awayTeamScore?.Points;
+    }
+
+    private void CancelIntermission()
+    {
+        remainingTime.CancelIntermission();
     }
 }

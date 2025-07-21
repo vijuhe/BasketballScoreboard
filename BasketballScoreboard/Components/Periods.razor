@@ -3,19 +3,19 @@
         PERIOD
     </div>
     <div class="col-3"/>
-    <div class="col-1 clickable" style="@GetBackgroundColor(1)" @onmousedown="@(_ => currentPeriod = 1)" @onmousedown:preventDefault="true">
+    <div class="col-1 clickable" style="@GetBackgroundColor(1)" @onmousedown="@(_ => ChangePeriod(1))" @onmousedown:preventDefault="true">
         1
     </div>
-    <div class="col-1 clickable" style="@GetBackgroundColor(2)" @onmousedown="@(_ => currentPeriod = 2)" @onmousedown:preventDefault="true">
+    <div class="col-1 clickable" style="@GetBackgroundColor(2)" @onmousedown="@(_ => ChangePeriod(2))" @onmousedown:preventDefault="true">
         2
     </div>
-    <div class="col-1 clickable" style="@GetBackgroundColor(3)" @onmousedown="@(_ => currentPeriod = 3)" @onmousedown:preventDefault="true">
+    <div class="col-1 clickable" style="@GetBackgroundColor(3)" @onmousedown="@(_ => ChangePeriod(3))" @onmousedown:preventDefault="true">
         3
     </div>
-    <div class="col-1 clickable" style="@GetBackgroundColor(4)" @onmousedown="@(_ => currentPeriod = 4)" @onmousedown:preventDefault="true">
+    <div class="col-1 clickable" style="@GetBackgroundColor(4)" @onmousedown="@(_ => ChangePeriod(4))" @onmousedown:preventDefault="true">
         4
     </div>
-    <div class="col-1 clickable" style="font-size: 9pt; padding-top: 17px; @GetBackgroundColor(5)" @onmousedown="@(_ => currentPeriod = 5)" @onmousedown:preventDefault="true">
+    <div class="col-1 clickable" style="font-size: 9pt; padding-top: 17px; @GetBackgroundColor(5)" @onmousedown="@(_ => ChangePeriod(5))" @onmousedown:preventDefault="true">
         OT
     </div>
 </div>
@@ -23,6 +23,9 @@
 @code
 {
     private byte currentPeriod = 1;
+
+    [Parameter]
+    public EventCallback OnPeriodManuallyChanged { get; set; }
 
     public void Next()
     {
@@ -46,5 +49,14 @@
         return period == currentPeriod
             ? "background-color: red;"
             : "";
+    }
+
+    private async void ChangePeriod(byte period)
+    {
+        if (currentPeriod != period)
+        {
+            currentPeriod = period;
+            await OnPeriodManuallyChanged.InvokeAsync();
+        }
     }
 }
