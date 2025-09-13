@@ -5,3 +5,22 @@
     text-align: center;
     cursor: pointer;
 }
+
+/* Responsive design for smaller external displays */
+@media (max-height: 900px) {
+    .text {
+        font-size: 20pt;
+    }
+}
+
+@media (max-height: 768px) {
+    .text {
+        font-size: 16pt;
+    }
+}
+
+@media (max-height: 600px) {
+    .text {
+        font-size: 12pt;
+    }
+}

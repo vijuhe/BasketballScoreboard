@@ -40,3 +40,67 @@
     text-align: center;
     font-size: 24pt;
 }
+
+/* Responsive design for smaller external displays */
+@media (max-height: 900px) {
+    .big-text {
+        font-size: 100pt;
+    }
+    #ongoing-minute {
+        font-size: 20pt;
+    }
+    .adjustment-text {
+        font-size: 20pt;
+    }
+    .adjustment {
+        font-size: 18pt;
+    }
+    #time-adjustments {
+        padding: 5px;
+        margin: -5px;
+    }
+}
+
+@media (max-height: 768px) {
+    .big-text {
+        font-size: 80pt;
+    }
+    #ongoing-minute {
+        font-size: 18pt;
+    }
+    .adjustment-text {
+        font-size: 16pt;
+    }
+    .adjustment {
+        font-size: 14pt;
+    }
+    #time-adjustments {
+        padding: 3px;
+        margin: -3px;
+    }
+    .container {
+        padding: 3px;
+    }
+}
+
+@media (max-height: 600px) {
+    .big-text {
+        font-size: 60pt;
+    }
+    #ongoing-minute {
+        font-size: 14pt;
+    }
+    .adjustment-text {
+        font-size: 12pt;
+    }
+    .adjustment {
+        font-size: 12pt;
+    }
+    #time-adjustments {
+        padding: 2px;
+        margin: -2px;
+    }
+    .container {
+        padding: 2px;
+    }
+}

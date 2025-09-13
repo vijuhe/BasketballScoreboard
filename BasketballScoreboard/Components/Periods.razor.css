@@ -8,3 +8,22 @@
 .clickable {
     cursor: pointer;
 }
+
+/* Responsive design for smaller external displays */
+@media (max-height: 900px) {
+    #periods {
+        font-size: 22pt;
+    }
+}
+
+@media (max-height: 768px) {
+    #periods {
+        font-size: 18pt;
+    }
+}
+
+@media (max-height: 600px) {
+    #periods {
+        font-size: 14pt;
+    }
+}

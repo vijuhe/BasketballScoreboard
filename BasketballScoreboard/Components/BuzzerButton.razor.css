@@ -14,3 +14,31 @@ img {
     width: 98%;
     height: 98%;
 }
+
+/* Responsive design for smaller external displays */
+@media (max-height: 900px) {
+    .row {
+        margin-top: 12px;
+    }
+    img {
+        padding: 4px;
+    }
+}
+
+@media (max-height: 768px) {
+    .row {
+        margin-top: 8px;
+    }
+    img {
+        padding: 3px;
+    }
+}
+
+@media (max-height: 600px) {
+    .row {
+        margin-top: 4px;
+    }
+    img {
+        padding: 2px;
+    }
+}

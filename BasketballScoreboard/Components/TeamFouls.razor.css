@@ -11,3 +11,31 @@
     text-align: center;
     cursor: pointer;
 }
+
+/* Responsive design for smaller external displays */
+@media (max-height: 900px) {
+    .title {
+        font-size: 18pt;
+    }
+    .foul-dot {
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-height: 768px) {
+    .title {
+        font-size: 14pt;
+    }
+    .foul-dot {
+        margin-bottom: 3px;
+    }
+}
+
+@media (max-height: 600px) {
+    .title {
+        font-size: 12pt;
+    }
+    .foul-dot {
+        margin-bottom: 2px;
+    }
+}
