@@ -84,3 +84,31 @@ html, body {
 #remaining-time {
     outline: none;
 }
+
+/* Responsive design for smaller external displays */
+@media (max-height: 900px) {
+    #scoreboard {
+        padding-top: 5px;
+    }
+    #timeout-and-period-row {
+        margin-top: 10px;
+    }
+}
+
+@media (max-height: 768px) {
+    #scoreboard {
+        padding-top: 2px;
+    }
+    #timeout-and-period-row {
+        margin-top: 5px;
+    }
+}
+
+@media (max-height: 600px) {
+    #scoreboard {
+        padding-top: 1px;
+    }
+    #timeout-and-period-row {
+        margin-top: 2px;
+    }
+}
