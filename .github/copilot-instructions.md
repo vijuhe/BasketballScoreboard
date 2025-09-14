@@ -62,7 +62,24 @@ After making any changes, ALWAYS test these scenarios:
    - Test timeout buttons for both teams
    - Test time controls (MINUTES +/- and SECONDS +/-)
 
-3. **Deployment Validation**:
+3. **Timer Functionality Testing**:
+   - Set timer to a few seconds (e.g., 00:05) using the SECONDS + button
+   - Click on the timer display to start it - verify timer begins counting down
+   - Click on the timer display again to pause it - verify timer stops
+   - Resume timer and let it reach 00:00 - verify buzzer plays and period end behavior
+   - Test intermission: Set timer to 00:02, let it expire, verify 2-minute intermission starts automatically
+   - During intermission, verify timer shows "1st MINUTE" and counts down from 02:00
+   - Let intermission complete - verify automatic transition to next period
+   - Test manual period change during intermission - verify intermission is cancelled
+   - Test overtime scenario: In 4th period with tied score, let timer expire to trigger overtime
+
+4. **Advanced Timer Scenarios**:
+   - Verify seconds display turns red when timer is under 1 minute (except during intermission)
+   - Test that timer cannot start if set to 00:00
+   - Verify "1st MINUTE" text updates correctly as timer counts down through different minutes
+   - Test period reset functionality and verify timer returns to initial state
+
+5. **Deployment Validation**:
    - Build output is generated in `bin/Debug/net9.0/wwwroot/`
    - Static files are properly generated for Azure Static Web Apps deployment
 
