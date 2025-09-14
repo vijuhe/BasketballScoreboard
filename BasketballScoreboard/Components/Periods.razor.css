@@ -9,10 +9,19 @@
     cursor: pointer;
 }
 
+.ot-period {
+    font-size: 9pt;
+    padding-top: 17px;
+}
+
 /* Responsive design for smaller external displays */
 @media (max-height: 900px) {
     #periods {
         font-size: 22pt;
+    }
+    .ot-period {
+        font-size: 8pt;
+        padding-top: 14px;
     }
 }
 
@@ -20,10 +29,18 @@
     #periods {
         font-size: 18pt;
     }
+    .ot-period {
+        font-size: 7pt;
+        padding-top: 11px;
+    }
 }
 
 @media (max-height: 600px) {
     #periods {
         font-size: 14pt;
+    }
+    .ot-period {
+        font-size: 6pt;
+        padding-top: 8px;
     }
 }
