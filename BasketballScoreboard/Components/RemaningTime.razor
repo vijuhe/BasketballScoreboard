@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="row clickable" @onclick="ToggleTimer">
-        @if (minutes == 0 && !isIntermission)
+        @if (minutes == 0 && !isIntermission && (timer!.Enabled || startingMinutes.HasValue))
         {
             <!-- Show seconds and tenths when under 1 minute (except during intermission) -->
             <div class="col-5">
