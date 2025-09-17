@@ -108,7 +108,7 @@
     public void ToggleTimer()
     {
         if (!timer!.Enabled && !startingMinutes.HasValue && minutes > 0) startingMinutes = minutes;
-        if (minutes > 0 || seconds > 0) timer!.Enabled = !timer.Enabled;
+        if (minutes > 0 || seconds > 0 || tenths > 0) timer!.Enabled = !timer.Enabled;
     }
 
     public void Reset()
