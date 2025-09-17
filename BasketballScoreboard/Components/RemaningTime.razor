@@ -2,24 +2,50 @@
 
 <div class="container">
     <div class="row clickable" @onclick="ToggleTimer">
-        <div class="col-5">
-            <div class="white-text big-text">
-                @minutes.ToPaddedString()
+        @if (PeriodCloseToEnding())
+        {
+            <!-- Show seconds and tenths -->
+            <div class="col-5">
+                <div class="white-text big-text" style="@GetSecondStyles()">
+                    @seconds.ToPaddedString()
+                </div>
             </div>
-        </div>
-        <div class="col-2">
-            <div class="white-text big-text">
-                :
+            <div class="col-2">
+                <div class="white-text big-text" style="@GetSecondStyles()">
+                    .
+                </div>
+                <div id="ongoing-minute">
+                    @ongoingMinute
+                </div>
             </div>
-            <div id="ongoing-minute">
-                @ongoingMinute
+            <div class="col-5">
+                <div class="white-text big-text" style="@GetSecondStyles()">
+                    @tenths
+                </div>
             </div>
-        </div>
-        <div class="col-5">
-            <div class="white-text big-text" style="@GetSecondStyles()">
-                @seconds.ToPaddedString()
+        }
+        else
+        {
+            <!-- Show minutes and seconds -->
+            <div class="col-5">
+                <div class="white-text big-text">
+                    @minutes.ToPaddedString()
+                </div>
             </div>
-        </div>
+            <div class="col-2">
+                <div class="white-text big-text">
+                    :
+                </div>
+                <div id="ongoing-minute">
+                    @ongoingMinute
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="white-text big-text" style="@GetSecondStyles()">
+                    @seconds.ToPaddedString()
+                </div>
+            </div>
+        }
     </div>
 
     <div id="time-adjustments" class="row white-text">
@@ -58,6 +84,7 @@
     private const byte overtimeLengthInMinutes = 5;
     private byte minutes = 0;
     private byte seconds = 0;
+    private byte tenths = 0;
     private string ongoingMinute = "1st MINUTE";
     private byte? startingMinutes;
     private Timer? timer;
@@ -72,22 +99,23 @@
 
     protected override void OnInitialized()
     {
-        timer = new Timer(1000);
+        timer = new Timer(100); // 100ms intervals for tenths of seconds
         timer.AutoReset = true;
         timer.Enabled = false;
-        timer.Elapsed += SecondPassed;
+        timer.Elapsed += TimerTick;
     }
 
     public void ToggleTimer()
     {
         if (!timer!.Enabled && !startingMinutes.HasValue && minutes > 0) startingMinutes = minutes;
-        if (minutes > 0 || seconds > 0) timer!.Enabled = !timer.Enabled;
+        if (minutes > 0 || seconds > 0 || tenths > 0) timer!.Enabled = !timer.Enabled;
     }
 
     public void Reset()
     {
         minutes = startingMinutes.HasValue ? startingMinutes.Value : (byte) 0;
         seconds = 0;
+        tenths = 0;
         ongoingMinute = "1st MINUTE";
         isIntermission = false;
         isOvertime = false;
@@ -98,6 +126,7 @@
     {
         minutes = intermissionLengthInMinutes;
         seconds = 0;
+        tenths = 0;
         ongoingMinute = "1st MINUTE";
         isIntermission = true;
         isOvertime = false;
@@ -108,6 +137,7 @@
     {
         minutes = overtimeLengthInMinutes;
         seconds = 0;
+        tenths = 0;
         ongoingMinute = "1st MINUTE";
         isIntermission = false;
         isOvertime = true;
@@ -123,17 +153,22 @@
         }
     }
 
+    private bool PeriodCloseToEnding()
+    {
+        return !isIntermission && (startingMinutes.HasValue && startingMinutes.Value <= 2) && (minutes == 0);
+    }
+
     private string GetSecondStyles()
     {
-        return minutes == 0 && seconds > 0 && !isIntermission
+        return minutes == 0 && (seconds > 0 || tenths > 0) && !isIntermission
             ? "color: red;"
             : "";
     }
 
-    private async void SecondPassed(Object? source, ElapsedEventArgs e)
+    private async void TimerTick(Object? source, ElapsedEventArgs e)
     {
-        SubtractSecond();
-        if (minutes == 0 && seconds == 0)
+        SubtractTenth();
+        if (minutes == 0 && seconds == 0 && tenths == 0)
         {
             timer!.Enabled = false;
             if (isIntermission) await OnIntermissionEnded.InvokeAsync();
@@ -142,23 +177,49 @@
         StateHasChanged();
     }
 
-    private void SubtractSecond()
+    private void SubtractTenth()
     {
-        if (seconds > 0) seconds--;
+        if (tenths > 0) tenths--;
+        else if (seconds > 0)
+        {
+            seconds--;
+            tenths = 9;
+        }
         else if (minutes > 0)
         {
             SubtractMinute();
             seconds = 59;
+            tenths = 9;
+        }
+    }
+
+    private void SubtractSecond()
+    {
+        if (seconds > 0) 
+        {
+            seconds--;
+            tenths = 0; // Reset tenths when manually adjusting seconds
+        }
+        else if (minutes > 0)
+        {
+            SubtractMinute();
+            seconds = 59;
+            tenths = 0;
         }
     }
 
     private void AddSecond()
     {
-        if (seconds < 59) seconds++;
+        if (seconds < 59) 
+        {
+            seconds++;
+            tenths = 0; // Reset tenths when manually adjusting seconds
+        }
         else 
         {
             AddMinute();
             seconds = 0;
+            tenths = 0;
         }
     }
 
