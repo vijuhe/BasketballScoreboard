@@ -2,9 +2,9 @@
 
 <div class="container">
     <div class="row clickable" @onclick="ToggleTimer">
-        @if (minutes == 0 && !isIntermission && (timer!.Enabled || startingMinutes.HasValue))
+        @if (PeriodCloseToEnding())
         {
-            <!-- Show seconds and tenths when under 1 minute (except during intermission) -->
+            <!-- Show seconds and tenths -->
             <div class="col-5">
                 <div class="white-text big-text" style="@GetSecondStyles()">
                     @seconds.ToPaddedString()
@@ -26,7 +26,7 @@
         }
         else
         {
-            <!-- Show minutes and seconds when 1 minute or more (or during intermission) -->
+            <!-- Show minutes and seconds -->
             <div class="col-5">
                 <div class="white-text big-text">
                     @minutes.ToPaddedString()
@@ -151,6 +151,11 @@
             if (timer!.Enabled) ToggleTimer();
             Reset();
         }
+    }
+
+    private bool PeriodCloseToEnding()
+    {
+        return !isIntermission && (startingMinutes.HasValue && startingMinutes.Value <= 2) && (minutes == 0);
     }
 
     private string GetSecondStyles()
