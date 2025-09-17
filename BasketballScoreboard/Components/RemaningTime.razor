@@ -160,7 +160,7 @@
 
     private string GetSecondStyles()
     {
-        return minutes == 0 && seconds > 0 && !isIntermission
+        return minutes == 0 && (seconds > 0 || tenths > 0) && !isIntermission
             ? "color: red;"
             : "";
     }
