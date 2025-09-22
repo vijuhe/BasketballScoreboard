@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballScoreboard", "Bas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballScoreboard.Tests", "BasketballScoreboard.Tests\BasketballScoreboard.Tests.csproj", "{F6335572-77FF-43EE-A915-8C887CEAB98F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballScoreboard.PlaywrightTests", "BasketballScoreboard.PlaywrightTests\BasketballScoreboard.PlaywrightTests.csproj", "{E4D066B1-BE5A-4618-B84B-F5B9330EF97B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F6335572-77FF-43EE-A915-8C887CEAB98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6335572-77FF-43EE-A915-8C887CEAB98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6335572-77FF-43EE-A915-8C887CEAB98F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4D066B1-BE5A-4618-B84B-F5B9330EF97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4D066B1-BE5A-4618-B84B-F5B9330EF97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4D066B1-BE5A-4618-B84B-F5B9330EF97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4D066B1-BE5A-4618-B84B-F5B9330EF97B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
