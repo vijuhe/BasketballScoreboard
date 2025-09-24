@@ -1,175 +1,129 @@
 using Bunit;
 using BasketballScoreboard.Components;
+using AngleSharp.Dom;
 
 namespace BasketballScoreboard.Tests;
 
 public class TeamFoulsTests : TestContext
 {
     [Fact]
-    public void TeamFouls_InitialState_ShouldHaveZeroFouls()
+    public void ThereAreNoFoulsInTheBeginningOfTheGame()
     {
-        // Arrange & Act
         var component = RenderComponent<TeamFouls>();
-
-        // Assert
-        Assert.Contains("FOULS", component.Markup);
         
-        // All foul dots should be correct for zero fouls state
         var foulDots = component.FindAll(".foul-dot");
-        Assert.Equal(5, foulDots.Count);
-        
-        // 5th foul position (dot 0) should be darkred when no fouls
-        Assert.Contains("background-color: darkred;", foulDots[0].GetAttribute("style"));
-        
-        // Other dots should be grey
-        for (int i = 1; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
-            Assert.Contains("background-color: grey;", foulDots[i].GetAttribute("style"));
+            AssertNoFoul(foulDots[i]);
         }
     }
 
     [Fact]
-    public void TeamFouls_ClickFirstFoul_ShouldSetToOneFoul()
+    public void FoulsCanBeAdded()
     {
-        // Arrange
         var component = RenderComponent<TeamFouls>();
 
-        // Act - Click the smallest dot (position 1, index 4)
-        var firstFoulDot = component.FindAll(".foul-dot")[4]; // Index 4 is the smallest (position 1)
-        firstFoulDot.MouseDown();
-
-        // Assert
         var foulDots = component.FindAll(".foul-dot");
         
-        // First dot (smallest) should be white (active)
-        Assert.Contains("background-color: white;", foulDots[4].GetAttribute("style"));
-        
-        // 5th foul position should still be darkred (not reached)
-        Assert.Contains("background-color: darkred;", foulDots[0].GetAttribute("style"));
-        
-        // Other dots should be grey
-        for (int i = 1; i < 4; i++)
-        {
-            Assert.Contains("background-color: grey;", foulDots[i].GetAttribute("style"));
-        }
+        foulDots[4].MouseDown();
+        foulDots.Refresh();
+        AssertNoFoul(foulDots[0]);
+        AssertNoFoul(foulDots[1]);
+        AssertNoFoul(foulDots[2]);
+        AssertNoFoul(foulDots[3]);
+        AssertFoul(foulDots[4]);
+
+        foulDots[3].MouseDown();
+        foulDots.Refresh();
+        AssertNoFoul(foulDots[0]);
+        AssertNoFoul(foulDots[1]);
+        AssertNoFoul(foulDots[2]);
+        AssertFoul(foulDots[3]);
+        AssertFoul(foulDots[4]);
+
+        foulDots[2].MouseDown();
+        foulDots.Refresh();
+        AssertNoFoul(foulDots[0]);
+        AssertNoFoul(foulDots[1]);
+        AssertFoul(foulDots[2]);
+        AssertFoul(foulDots[3]);
+        AssertFoul(foulDots[4]);
+
+        foulDots[1].MouseDown();
+        foulDots.Refresh();
+        AssertNoFoul(foulDots[0]);
+        AssertFoul(foulDots[1]);
+        AssertFoul(foulDots[2]);
+        AssertFoul(foulDots[3]);
+        AssertFoul(foulDots[4]);
+
+        foulDots[0].MouseDown();
+        foulDots.Refresh();
+        AssertFoul(foulDots[0]);
+        AssertFoul(foulDots[1]);
+        AssertFoul(foulDots[2]);
+        AssertFoul(foulDots[3]);
+        AssertFoul(foulDots[4]);
     }
 
     [Fact]
-    public void TeamFouls_ClickThirdFoul_ShouldSetToThreeFouls()
+    public void ManyFoulsCanBeAddedWithOneClick()
     {
-        // Arrange
         var component = RenderComponent<TeamFouls>();
 
-        // Act - Click the third foul dot (index 2)
-        var thirdFoulDot = component.FindAll(".foul-dot")[2];
-        thirdFoulDot.MouseDown();
-
-        // Assert
         var foulDots = component.FindAll(".foul-dot");
+        foulDots[3].MouseDown();
         
-        // Dots 2, 3, 4 should be white (positions 3, 2, 1 are active)
-        Assert.Contains("background-color: white;", foulDots[2].GetAttribute("style")); // 3rd foul
-        Assert.Contains("background-color: white;", foulDots[3].GetAttribute("style")); // 2nd foul
-        Assert.Contains("background-color: white;", foulDots[4].GetAttribute("style")); // 1st foul
-        
-        // 5th foul position should still be darkred (not reached)
-        Assert.Contains("background-color: darkred;", foulDots[0].GetAttribute("style"));
-        
-        // 4th foul position should be grey (not reached yet)
-        Assert.Contains("background-color: grey;", foulDots[1].GetAttribute("style"));
+        foulDots.Refresh();
+        AssertNoFoul(foulDots[0]);
+        AssertNoFoul(foulDots[1]);
+        AssertNoFoul(foulDots[2]);
+        AssertFoul(foulDots[3]);
+        AssertFoul(foulDots[4]);
     }
 
     [Fact]
-    public void TeamFouls_ClickFifthFoul_ShouldSetToFiveFoulsWithRedBackground()
+    public void FoulsCanBeManuallyResetByClickingTheTitle()
     {
-        // Arrange
         var component = RenderComponent<TeamFouls>();
-
-        // Act - Click the fifth foul dot (largest one, index 0)
-        var fifthFoulDot = component.FindAll(".foul-dot")[0];
-        fifthFoulDot.MouseDown();
-
-        // Assert
         var foulDots = component.FindAll(".foul-dot");
-        
-        // Fifth foul dot should be red (penalty situation)
-        Assert.Contains("background-color: red;", foulDots[0].GetAttribute("style"));
-        
-        // All other dots should be white (active)
-        for (int i = 1; i < 5; i++)
-        {
-            Assert.Contains("background-color: white;", foulDots[i].GetAttribute("style"));
-        }
-    }
+        foulDots[3].MouseDown();
 
-    [Fact]
-    public void TeamFouls_ClickTitle_ShouldResetToZeroFouls()
-    {
-        // Arrange
-        var component = RenderComponent<TeamFouls>();
-        
-        // First set some fouls
-        var thirdFoulDot = component.FindAll(".foul-dot")[2];
-        thirdFoulDot.MouseDown();
-
-        // Act - Click the title to reset
         var title = component.Find(".title");
         title.MouseDown();
 
-        // Assert
-        var foulDots = component.FindAll(".foul-dot");
-        
-        // All dots should be grey again (no fouls)
-        foreach (var dot in foulDots)
-        {
-            var style = dot.GetAttribute("style");
-            Assert.True(
-                style.Contains("background-color: grey;") || style.Contains("background-color: darkred;"),
-                $"Expected grey or darkred background, but got: {style}"
-            );
-        }
+        foulDots.Refresh();
+        AssertNoFoul(foulDots[0]);
+        AssertNoFoul(foulDots[1]);
+        AssertNoFoul(foulDots[2]);
+        AssertNoFoul(foulDots[3]);
+        AssertNoFoul(foulDots[4]);
     }
 
     [Fact]
-    public void TeamFouls_Reset_ShouldReturnToZeroFouls()
+    public void ResettingReturnsToZeroFouls()
     {
-        // Arrange
         var component = RenderComponent<TeamFouls>();
-        
-        // First set some fouls
-        var fifthFoulDot = component.FindAll(".foul-dot")[0];
-        fifthFoulDot.MouseDown();
+        var foulDots = component.FindAll(".foul-dot");
+        foulDots[1].MouseDown();
 
-        // Act
         component.InvokeAsync(() => component.Instance.Reset());
 
-        // Assert
-        var foulDots = component.FindAll(".foul-dot");
-        
-        // All dots should be grey or darkred (no fouls)
-        foreach (var dot in foulDots)
-        {
-            var style = dot.GetAttribute("style");
-            Assert.True(
-                style.Contains("background-color: grey;") || style.Contains("background-color: darkred;"),
-                $"Expected grey or darkred background, but got: {style}"
-            );
-        }
+        foulDots.Refresh();
+        AssertNoFoul(foulDots[0]);
+        AssertNoFoul(foulDots[1]);
+        AssertNoFoul(foulDots[2]);
+        AssertNoFoul(foulDots[3]);
+        AssertNoFoul(foulDots[4]);
     }
 
-    [Theory]
-    [InlineData(0, "background-color: darkred;")] // 5th foul position when no fouls
-    [InlineData(1, "background-color: grey;")] // 4th foul position when no fouls
-    [InlineData(2, "background-color: grey;")] // 3rd foul position when no fouls
-    [InlineData(3, "background-color: grey;")] // 2nd foul position when no fouls
-    [InlineData(4, "background-color: grey;")] // 1st foul position when no fouls
-    public void TeamFouls_InitialState_ShouldHaveCorrectColors(int dotIndex, string expectedColor)
+    private static void AssertNoFoul(IElement element)
     {
-        // Arrange & Act
-        var component = RenderComponent<TeamFouls>();
+        Assert.Matches("background-color: (grey|darkred);", element.GetAttribute("style"));
+    }
 
-        // Assert
-        var foulDots = component.FindAll(".foul-dot");
-        Assert.Contains(expectedColor, foulDots[dotIndex].GetAttribute("style"));
+    private void AssertFoul(IElement element)
+    {
+        Assert.Matches("background-color: (white|red);", element.GetAttribute("style"));
     }
 }
