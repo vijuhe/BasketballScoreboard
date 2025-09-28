@@ -10,9 +10,8 @@ public class RemainingTimeTests : TestContext
     {
         var component = RenderComponent<RemaningTime>();
 
-        var timeParts = component.FindAll(".white-text").Select(tp => tp.TextContent.Trim());
-        Assert.Contains(":", timeParts);
-        Assert.Equal(2, timeParts.Count(tp => tp == "00"));
+        IEnumerable<string> timeParts = GetTimeParts(component);
+        AssertNoRemainingTime(timeParts);
     }
 
     [Fact]
@@ -21,11 +20,11 @@ public class RemainingTimeTests : TestContext
         var component = RenderComponent<RemaningTime>();
         
         component.InvokeAsync(() => component.Instance.Overtime());
-        
-        var timeParts = component.FindAll(".white-text").Select(tp => tp.TextContent.Trim());
+
+        IEnumerable<string> timeParts = GetTimeParts(component);
+        Assert.Contains("05", timeParts);
         Assert.Contains(":", timeParts);
-        Assert.Equal(1, timeParts.Count(tp => tp == "00"));
-        Assert.Equal(1, timeParts.Count(tp => tp == "05"));
+        Assert.Contains("00", timeParts);
     }
 
     [Fact]
@@ -35,9 +34,53 @@ public class RemainingTimeTests : TestContext
         
         component.InvokeAsync(() => component.Instance.Overtime());
         component.InvokeAsync(() => component.Instance.Reset());
-        
-        var timeParts = component.FindAll(".white-text").Select(tp => tp.TextContent.Trim());
+
+        IEnumerable<string> timeParts = GetTimeParts(component);
+        AssertNoRemainingTime(timeParts);
+    }
+
+    [Fact]
+    public void RemainingTimeCannotBeSetBelowZero()
+    {
+        var component = RenderComponent<RemaningTime>();
+
+        var minusButtons = component.FindAll(".adjustment:contains('-')");
+        minusButtons[0].Click();
+        minusButtons[1].Click();
+
+        IEnumerable<string> timeParts = GetTimeParts(component);
+        AssertNoRemainingTime(timeParts);
+    }
+
+    [Fact]
+    public void RemainingTimeCanBeChanged()
+    {
+        var component = RenderComponent<RemaningTime>();
+
+        var minusButtons = component.FindAll(".adjustment:contains('-')");
+        var plusButtons = component.FindAll(".adjustment:contains('+')");
+        plusButtons[0].Click();
+        plusButtons[1].Click();
+        plusButtons[0].Click();
+        plusButtons[1].Click();
+        plusButtons[0].Click();
+        minusButtons[0].Click();
+        minusButtons[1].Click();
+
+        IEnumerable<string> timeParts = GetTimeParts(component);
+        Assert.Contains("02", timeParts);
+        Assert.Contains(":", timeParts);
+        Assert.Contains("01", timeParts);
+    }
+
+    private static void AssertNoRemainingTime(IEnumerable<string> timeParts)
+    {
         Assert.Contains(":", timeParts);
         Assert.Equal(2, timeParts.Count(tp => tp == "00"));
+    }
+
+    private static IEnumerable<string> GetTimeParts(IRenderedComponent<RemaningTime> component)
+    {
+        return component.FindAll(".white-text").Select(tp => tp.TextContent.Trim());
     }
 }
