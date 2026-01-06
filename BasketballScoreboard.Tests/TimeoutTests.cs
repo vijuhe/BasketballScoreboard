@@ -3,12 +3,12 @@ using TimeoutComponent = BasketballScoreboard.Components.Timeout;
 
 namespace BasketballScoreboard.Tests;
 
-public class TimeoutTests : TestContext
+public class TimeoutTests : BunitContext
 {
     [Fact]
     public void TimeoutIsNotOngoingInTheBeginningOfTheGame()
     {
-        var component = RenderComponent<TimeoutComponent>();
+        var component = Render<TimeoutComponent>();
 
         Assert.Contains("TIME OUT", component.Markup);
     }
@@ -16,7 +16,7 @@ public class TimeoutTests : TestContext
     [Fact]
     public void TimeoutCanBeStarted()
     {
-        var component = RenderComponent<TimeoutComponent>();
+        var component = Render<TimeoutComponent>();
 
         var textElement = component.Find(".text");
         textElement.MouseDown();
@@ -28,7 +28,7 @@ public class TimeoutTests : TestContext
     [Fact]
     public void TimeoutCanBeCancelled()
     {
-        var component = RenderComponent<TimeoutComponent>();
+        var component = Render<TimeoutComponent>();
         var textElement = component.Find(".text");
         textElement.MouseDown();
         

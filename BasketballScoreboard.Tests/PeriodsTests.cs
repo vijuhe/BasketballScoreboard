@@ -4,12 +4,12 @@ using AngleSharp.Dom;
 
 namespace BasketballScoreboard.Tests;
 
-public class PeriodsTests : TestContext
+public class PeriodsTests : BunitContext
 {
     [Fact]
     public void GameBeginsWithFirstPeriod()
     {
-        var component = RenderComponent<Periods>();
+        using var component = Render<Periods>();
 
         var periodButtons = component.FindAll(".clickable");
         AssertPeriodOngoing(periodButtons[0]);
@@ -22,12 +22,12 @@ public class PeriodsTests : TestContext
     [Fact]
     public void PeriodCanBeManuallyChanged()
     {
-        var component = RenderComponent<Periods>();
+        using var component = Render<Periods>();
 
         var periodButtons = component.FindAll(".clickable");
         periodButtons[1].MouseDown();
 
-        periodButtons.Refresh();
+        periodButtons = component.FindAll(".clickable");
         AssertPeriodOngoing(periodButtons[1]);
         AssertPeriodNotOngoing(periodButtons[0]);
         AssertPeriodNotOngoing(periodButtons[2]);
@@ -38,12 +38,12 @@ public class PeriodsTests : TestContext
     [Fact]
     public void TryingToManuallyChangeToOngoingPeriodDoesNothing()
     {
-        var component = RenderComponent<Periods>();
+        using var component = Render<Periods>();
 
         var periodButtons = component.FindAll(".clickable");
         periodButtons[0].MouseDown();
 
-        periodButtons.Refresh();
+        periodButtons = component.FindAll(".clickable");
         AssertPeriodOngoing(periodButtons[0]);
         for (int i = 1; i < 5; i++)
         {
@@ -54,7 +54,7 @@ public class PeriodsTests : TestContext
     [Fact]
     public void PeriodCanBeAutomaticallyChanged()
     {
-        var component = RenderComponent<Periods>();
+        using var component = Render<Periods>();
 
         component.InvokeAsync(() => component.Instance.Next());
         component.InvokeAsync(() => component.Instance.Next());
@@ -70,7 +70,7 @@ public class PeriodsTests : TestContext
     [Fact]
     public void FourthPeriodAndOvertimeAreLastPeriods()
     {
-        var component = RenderComponent<Periods>();
+        using var component = Render<Periods>();
 
         Assert.False(component.Instance.IsLastPeriod);
         component.InvokeAsync(() => component.Instance.Next());
@@ -87,7 +87,7 @@ public class PeriodsTests : TestContext
     [Fact]
     public void ThereIsNoNextPeriodAfterOvertime()
     {
-        var component = RenderComponent<Periods>();
+        using var component = Render<Periods>();
 
         for(int i = 0; i < 9; i++)
         {
@@ -105,7 +105,7 @@ public class PeriodsTests : TestContext
     [Fact]
     public void ResettingReturnsToFirstPeriod()
     {
-        var component = RenderComponent<Periods>();
+        using var component = Render<Periods>();
         component.InvokeAsync(() => component.Instance.Next());
         component.InvokeAsync(() => component.Instance.Next());
 

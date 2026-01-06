@@ -3,12 +3,12 @@ using Bunit;
 
 namespace BasketballScoreboard.Tests;
 
-public class RemainingTimeTests : TestContext
+public class RemainingTimeTests : BunitContext
 {
     [Fact]
     public void RemainingTimeIsNotSetInTheBeginningOfTheGame()
     {
-        var component = RenderComponent<RemaningTime>();
+        using var component = Render<RemaningTime>();
 
         IEnumerable<string> timeParts = GetTimeParts(component);
         AssertNoRemainingTime(timeParts);
@@ -17,7 +17,7 @@ public class RemainingTimeTests : TestContext
     [Fact]
     public void OvertimeLengthIsConstant()
     {
-        var component = RenderComponent<RemaningTime>();
+        using var component = Render<RemaningTime>();
         
         component.InvokeAsync(() => component.Instance.Overtime());
 
@@ -30,7 +30,7 @@ public class RemainingTimeTests : TestContext
     [Fact]
     public void RemainingTimeCanBeReset()
     {
-        var component = RenderComponent<RemaningTime>();
+        using var component = Render<RemaningTime>();
         
         component.InvokeAsync(() => component.Instance.Overtime());
         component.InvokeAsync(() => component.Instance.Reset());
@@ -42,7 +42,7 @@ public class RemainingTimeTests : TestContext
     [Fact]
     public void RemainingTimeCannotBeSetBelowZero()
     {
-        var component = RenderComponent<RemaningTime>();
+        using var component = Render<RemaningTime>();
 
         var minusButtons = component.FindAll(".adjustment:contains('-')");
         minusButtons[0].Click();
@@ -55,7 +55,7 @@ public class RemainingTimeTests : TestContext
     [Fact]
     public void RemainingTimeCanBeChanged()
     {
-        var component = RenderComponent<RemaningTime>();
+        using var component = Render<RemaningTime>();
 
         var minusButtons = component.FindAll(".adjustment:contains('-')");
         var plusButtons = component.FindAll(".adjustment:contains('+')");

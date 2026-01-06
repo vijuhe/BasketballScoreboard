@@ -3,12 +3,12 @@ using BasketballScoreboard.Components;
 
 namespace BasketballScoreboard.Tests;
 
-public class TeamScoreTests : TestContext
+public class TeamScoreTests : BunitContext
 {
     [Fact]
     public void GameBeginsWithZeroPoints()
     {
-        var component = RenderComponent<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
+        using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
 
         Assert.Contains("00", component.Markup);
     }
@@ -16,8 +16,8 @@ public class TeamScoreTests : TestContext
     [Fact]
     public void ThereAreHomeAndAwayTeams()
     {
-        var homeTeamComponent = RenderComponent<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
-        var awayTeamComponent = RenderComponent<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, false));
+        using var homeTeamComponent = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
+        using var awayTeamComponent = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, false));
 
         Assert.Contains("HOME", homeTeamComponent.Markup);
         Assert.Contains("AWAY", awayTeamComponent.Markup);
@@ -26,7 +26,7 @@ public class TeamScoreTests : TestContext
     [Fact]
     public void ScoreCanBeIncreased()
     {
-        var component = RenderComponent<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
+        using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
 
         var plusButton = component.Find(".adjustment:contains('+')");
         plusButton.MouseDown();
@@ -38,7 +38,7 @@ public class TeamScoreTests : TestContext
     [Fact]
     public void ScoreCanBeDecreased()
     {
-        var component = RenderComponent<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
+        using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
 
         var plusButton = component.Find(".adjustment:contains('+')");
         plusButton.MouseDown();
@@ -54,7 +54,7 @@ public class TeamScoreTests : TestContext
     [Fact]
     public void PointsCannotGoBelowZero()
     {
-        var component = RenderComponent<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
+        using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
 
         var minusButton = component.Find(".adjustment:contains('-')");
         minusButton.MouseDown();
@@ -66,7 +66,7 @@ public class TeamScoreTests : TestContext
     [Fact]
     public void ResettingReturnsToZeroPoints()
     {
-        var component = RenderComponent<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
+        using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
         var plusButton = component.Find(".adjustment:contains('+')");
         plusButton.MouseDown();
         plusButton.MouseDown();

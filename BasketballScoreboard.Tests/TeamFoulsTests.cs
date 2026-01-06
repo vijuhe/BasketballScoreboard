@@ -4,12 +4,12 @@ using AngleSharp.Dom;
 
 namespace BasketballScoreboard.Tests;
 
-public class TeamFoulsTests : TestContext
+public class TeamFoulsTests : BunitContext
 {
     [Fact]
     public void ThereAreNoFoulsInTheBeginningOfTheGame()
     {
-        var component = RenderComponent<TeamFouls>();
+        using var component = Render<TeamFouls>();
         
         var foulDots = component.FindAll(".foul-dot");
         for (int i = 0; i < 5; i++)
@@ -21,12 +21,12 @@ public class TeamFoulsTests : TestContext
     [Fact]
     public void FoulsCanBeAdded()
     {
-        var component = RenderComponent<TeamFouls>();
+        using var component = Render<TeamFouls>();
 
         var foulDots = component.FindAll(".foul-dot");
         
         foulDots[4].MouseDown();
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertNoFoul(foulDots[0]);
         AssertNoFoul(foulDots[1]);
         AssertNoFoul(foulDots[2]);
@@ -34,7 +34,7 @@ public class TeamFoulsTests : TestContext
         AssertFoul(foulDots[4]);
 
         foulDots[3].MouseDown();
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertNoFoul(foulDots[0]);
         AssertNoFoul(foulDots[1]);
         AssertNoFoul(foulDots[2]);
@@ -42,7 +42,7 @@ public class TeamFoulsTests : TestContext
         AssertFoul(foulDots[4]);
 
         foulDots[2].MouseDown();
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertNoFoul(foulDots[0]);
         AssertNoFoul(foulDots[1]);
         AssertFoul(foulDots[2]);
@@ -50,7 +50,7 @@ public class TeamFoulsTests : TestContext
         AssertFoul(foulDots[4]);
 
         foulDots[1].MouseDown();
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertNoFoul(foulDots[0]);
         AssertFoul(foulDots[1]);
         AssertFoul(foulDots[2]);
@@ -58,7 +58,7 @@ public class TeamFoulsTests : TestContext
         AssertFoul(foulDots[4]);
 
         foulDots[0].MouseDown();
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertFoul(foulDots[0]);
         AssertFoul(foulDots[1]);
         AssertFoul(foulDots[2]);
@@ -69,12 +69,12 @@ public class TeamFoulsTests : TestContext
     [Fact]
     public void ManyFoulsCanBeAddedWithOneClick()
     {
-        var component = RenderComponent<TeamFouls>();
+        using var component = Render<TeamFouls>();
 
         var foulDots = component.FindAll(".foul-dot");
         foulDots[3].MouseDown();
         
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertNoFoul(foulDots[0]);
         AssertNoFoul(foulDots[1]);
         AssertNoFoul(foulDots[2]);
@@ -85,14 +85,14 @@ public class TeamFoulsTests : TestContext
     [Fact]
     public void FoulsCanBeManuallyResetByClickingTheTitle()
     {
-        var component = RenderComponent<TeamFouls>();
+        using var component = Render<TeamFouls>();
         var foulDots = component.FindAll(".foul-dot");
         foulDots[3].MouseDown();
 
         var title = component.Find(".title");
         title.MouseDown();
 
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertNoFoul(foulDots[0]);
         AssertNoFoul(foulDots[1]);
         AssertNoFoul(foulDots[2]);
@@ -103,13 +103,13 @@ public class TeamFoulsTests : TestContext
     [Fact]
     public void ResettingReturnsToZeroFouls()
     {
-        var component = RenderComponent<TeamFouls>();
+        using var component = Render<TeamFouls>();
         var foulDots = component.FindAll(".foul-dot");
         foulDots[1].MouseDown();
 
         component.InvokeAsync(() => component.Instance.Reset());
 
-        foulDots.Refresh();
+        foulDots = component.FindAll(".foul-dot");
         AssertNoFoul(foulDots[0]);
         AssertNoFoul(foulDots[1]);
         AssertNoFoul(foulDots[2]);
