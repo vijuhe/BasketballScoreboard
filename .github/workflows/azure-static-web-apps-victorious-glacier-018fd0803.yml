@@ -75,19 +75,20 @@ jobs:
           submodules: true
           lfs: false
 
+      # steps before deploy are needed temporarily until this gets fixed: https://github.com/microsoft/Oryx/issues/2702
       - name: Setup .NET 10.0
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore BasketballScoreboard/BasketballScoreboard.csproj
 
       - name: .NET Build
-        run: dotnet build --no-restore
+        run: dotnet build BasketballScoreboard/BasketballScoreboard.csproj -c release -f net10.0 --no-restore
 
       - name: .NET Publish
-        run: dotnet publish BasketballScoreboard/BasketballScoreboard.csproj -o publish --no-build
+        run: dotnet publish BasketballScoreboard/BasketballScoreboard.csproj -c release -f net10.0 -o publish --no-build
 
       - name: Deploy
         id: builddeploy
