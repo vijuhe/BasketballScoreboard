@@ -1,11 +1,13 @@
 ﻿using BasketballScoreboard.Components;
 using Bunit;
+using NUnit.Framework;
 
 namespace BasketballScoreboard.Tests;
 
+[TestFixture]
 public class RemainingTimeTests : BunitContext
 {
-    [Fact]
+    [Test]
     public void RemainingTimeIsNotSetInTheBeginningOfTheGame()
     {
         using var component = Render<RemaningTime>();
@@ -14,7 +16,7 @@ public class RemainingTimeTests : BunitContext
         AssertNoRemainingTime(timeParts);
     }
 
-    [Fact]
+    [Test]
     public void OvertimeLengthIsConstant()
     {
         using var component = Render<RemaningTime>();
@@ -22,12 +24,12 @@ public class RemainingTimeTests : BunitContext
         component.InvokeAsync(() => component.Instance.Overtime());
 
         IEnumerable<string> timeParts = GetTimeParts(component);
-        Assert.Contains("05", timeParts);
-        Assert.Contains(":", timeParts);
-        Assert.Contains("00", timeParts);
+        Assert.That(timeParts, Does.Contain("05"));
+        Assert.That(timeParts, Does.Contain(":"));
+        Assert.That(timeParts, Does.Contain("00"));
     }
 
-    [Fact]
+    [Test]
     public void RemainingTimeCanBeReset()
     {
         using var component = Render<RemaningTime>();
@@ -39,7 +41,7 @@ public class RemainingTimeTests : BunitContext
         AssertNoRemainingTime(timeParts);
     }
 
-    [Fact]
+    [Test]
     public void RemainingTimeCannotBeSetBelowZero()
     {
         using var component = Render<RemaningTime>();
@@ -52,7 +54,7 @@ public class RemainingTimeTests : BunitContext
         AssertNoRemainingTime(timeParts);
     }
 
-    [Fact]
+    [Test]
     public void RemainingTimeCanBeChanged()
     {
         using var component = Render<RemaningTime>();
@@ -68,15 +70,15 @@ public class RemainingTimeTests : BunitContext
         minusButtons[1].Click();
 
         IEnumerable<string> timeParts = GetTimeParts(component);
-        Assert.Contains("02", timeParts);
-        Assert.Contains(":", timeParts);
-        Assert.Contains("01", timeParts);
+        Assert.That(timeParts, Does.Contain("02"));
+        Assert.That(timeParts, Does.Contain(":"));
+        Assert.That(timeParts, Does.Contain("01"));
     }
 
     private static void AssertNoRemainingTime(IEnumerable<string> timeParts)
     {
-        Assert.Contains(":", timeParts);
-        Assert.Equal(2, timeParts.Count(tp => tp == "00"));
+        Assert.That(timeParts, Does.Contain(":"));
+        Assert.That(timeParts.Where(tp => tp == "00"), Has.Exactly(2).Items);
     }
 
     private static IEnumerable<string> GetTimeParts(IRenderedComponent<RemaningTime> component)

@@ -30,7 +30,7 @@ The test suite covers all major functionality of the Basketball Scoreboard:
 ## Prerequisites
 
 ### .NET Requirements
-- .NET 9.0 SDK
+- .NET 10.0 SDK
 - ASP.NET Core runtime
 
 ### Playwright Setup

@@ -1,12 +1,14 @@
 using Bunit;
 using BasketballScoreboard.Components;
 using AngleSharp.Dom;
+using NUnit.Framework;
 
 namespace BasketballScoreboard.Tests;
 
+[TestFixture]
 public class PeriodsTests : BunitContext
 {
-    [Fact]
+    [Test]
     public void GameBeginsWithFirstPeriod()
     {
         using var component = Render<Periods>();
@@ -19,7 +21,7 @@ public class PeriodsTests : BunitContext
         }
     }
 
-    [Fact]
+    [Test]
     public void PeriodCanBeManuallyChanged()
     {
         using var component = Render<Periods>();
@@ -35,7 +37,7 @@ public class PeriodsTests : BunitContext
         AssertPeriodNotOngoing(periodButtons[4]);
     }
 
-    [Fact]
+    [Test]
     public void TryingToManuallyChangeToOngoingPeriodDoesNothing()
     {
         using var component = Render<Periods>();
@@ -51,7 +53,7 @@ public class PeriodsTests : BunitContext
         }
     }
 
-    [Fact]
+    [Test]
     public void PeriodCanBeAutomaticallyChanged()
     {
         using var component = Render<Periods>();
@@ -67,24 +69,24 @@ public class PeriodsTests : BunitContext
         AssertPeriodNotOngoing(periodButtons[4]);
     }
 
-    [Fact]
+    [Test]
     public void FourthPeriodAndOvertimeAreLastPeriods()
     {
         using var component = Render<Periods>();
 
-        Assert.False(component.Instance.IsLastPeriod);
+        Assert.That(component.Instance.IsLastPeriod, Is.False);
         component.InvokeAsync(() => component.Instance.Next());
-        Assert.False(component.Instance.IsLastPeriod);
+        Assert.That(component.Instance.IsLastPeriod, Is.False);
         component.InvokeAsync(() => component.Instance.Next());
-        Assert.False(component.Instance.IsLastPeriod);
+        Assert.That(component.Instance.IsLastPeriod, Is.False);
         
         component.InvokeAsync(() => component.Instance.Next());
-        Assert.True(component.Instance.IsLastPeriod);
+        Assert.That(component.Instance.IsLastPeriod, Is.True);
         component.InvokeAsync(() => component.Instance.Next());
-        Assert.True(component.Instance.IsLastPeriod);
+        Assert.That(component.Instance.IsLastPeriod, Is.True);
     }
 
-    [Fact]
+    [Test]
     public void ThereIsNoNextPeriodAfterOvertime()
     {
         using var component = Render<Periods>();
@@ -102,7 +104,7 @@ public class PeriodsTests : BunitContext
         AssertPeriodNotOngoing(periodButtons[3]);
     }
 
-    [Fact]
+    [Test]
     public void ResettingReturnsToFirstPeriod()
     {
         using var component = Render<Periods>();
@@ -121,11 +123,11 @@ public class PeriodsTests : BunitContext
 
     private static void AssertPeriodNotOngoing(IElement element)
     {
-        Assert.DoesNotContain("background-color: red;", element.GetAttribute("style"));
+        Assert.That(element.GetAttribute("style"), Does.Not.Contain("background-color: red;"));
     }
 
     private static void AssertPeriodOngoing(IElement element)
     {
-        Assert.Contains("background-color: red;", element.GetAttribute("style"));
+        Assert.That(element.GetAttribute("style"), Does.Contain("background-color: red;"));
     }
 }

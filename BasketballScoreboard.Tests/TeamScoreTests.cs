@@ -1,29 +1,34 @@
 ﻿using Bunit;
 using BasketballScoreboard.Components;
+using NUnit.Framework;
 
 namespace BasketballScoreboard.Tests;
 
+[TestFixture]
 public class TeamScoreTests : BunitContext
 {
-    [Fact]
+    [Test]
     public void GameBeginsWithZeroPoints()
     {
         using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
 
-        Assert.Contains("00", component.Markup);
+        Assert.That(component.Markup, Does.Contain("00"));
     }
 
-    [Fact]
+    [Test]
     public void ThereAreHomeAndAwayTeams()
     {
         using var homeTeamComponent = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
         using var awayTeamComponent = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, false));
 
-        Assert.Contains("HOME", homeTeamComponent.Markup);
-        Assert.Contains("AWAY", awayTeamComponent.Markup);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(homeTeamComponent.Markup, Does.Contain("HOME"));
+            Assert.That(awayTeamComponent.Markup, Does.Contain("AWAY"));
+        }
     }
 
-    [Fact]
+    [Test]
     public void ScoreCanBeIncreased()
     {
         using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
@@ -31,11 +36,14 @@ public class TeamScoreTests : BunitContext
         var plusButton = component.Find(".adjustment:contains('+')");
         plusButton.MouseDown();
 
-        Assert.Contains("01", component.Markup);
-        Assert.Equal(1, component.Instance.Points);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(component.Markup, Does.Contain("01"));
+            Assert.That(component.Instance.Points, Is.EqualTo(1));
+        }
     }
 
-    [Fact]
+    [Test]
     public void ScoreCanBeDecreased()
     {
         using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
@@ -47,11 +55,14 @@ public class TeamScoreTests : BunitContext
         var minusButton = component.Find(".adjustment:contains('-')");
         minusButton.MouseDown();
 
-        Assert.Contains("01", component.Markup);
-        Assert.Equal(1, component.Instance.Points);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(component.Markup, Does.Contain("01"));
+            Assert.That(component.Instance.Points, Is.EqualTo(1));
+        }
     }
 
-    [Fact]
+    [Test]
     public void PointsCannotGoBelowZero()
     {
         using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
@@ -59,11 +70,14 @@ public class TeamScoreTests : BunitContext
         var minusButton = component.Find(".adjustment:contains('-')");
         minusButton.MouseDown();
 
-        Assert.Contains("00", component.Markup);
-        Assert.Equal(0, component.Instance.Points);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(component.Markup, Does.Contain("00"));
+            Assert.That(component.Instance.Points, Is.EqualTo(0));
+        }
     }
 
-    [Fact]
+    [Test]
     public void ResettingReturnsToZeroPoints()
     {
         using var component = Render<TeamScore>(parameters => parameters.Add(p => p.IsHomeTeam, true));
@@ -74,7 +88,10 @@ public class TeamScoreTests : BunitContext
 
         component.InvokeAsync(() => component.Instance.Reset());
 
-        Assert.Contains("00", component.Markup);
-        Assert.Equal(0, component.Instance.Points);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(component.Markup, Does.Contain("00"));
+            Assert.That(component.Instance.Points, Is.EqualTo(0));
+        }
     }
 }

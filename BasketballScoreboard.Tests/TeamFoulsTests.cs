@@ -1,12 +1,14 @@
 using Bunit;
 using BasketballScoreboard.Components;
 using AngleSharp.Dom;
+using NUnit.Framework;
 
 namespace BasketballScoreboard.Tests;
 
+[TestFixture]
 public class TeamFoulsTests : BunitContext
 {
-    [Fact]
+    [Test]
     public void ThereAreNoFoulsInTheBeginningOfTheGame()
     {
         using var component = Render<TeamFouls>();
@@ -18,7 +20,7 @@ public class TeamFoulsTests : BunitContext
         }
     }
 
-    [Fact]
+    [Test]
     public void FoulsCanBeAdded()
     {
         using var component = Render<TeamFouls>();
@@ -66,7 +68,7 @@ public class TeamFoulsTests : BunitContext
         AssertFoul(foulDots[4]);
     }
 
-    [Fact]
+    [Test]
     public void ManyFoulsCanBeAddedWithOneClick()
     {
         using var component = Render<TeamFouls>();
@@ -82,7 +84,7 @@ public class TeamFoulsTests : BunitContext
         AssertFoul(foulDots[4]);
     }
 
-    [Fact]
+    [Test]
     public void FoulsCanBeManuallyResetByClickingTheTitle()
     {
         using var component = Render<TeamFouls>();
@@ -100,7 +102,7 @@ public class TeamFoulsTests : BunitContext
         AssertNoFoul(foulDots[4]);
     }
 
-    [Fact]
+    [Test]
     public void ResettingReturnsToZeroFouls()
     {
         using var component = Render<TeamFouls>();
@@ -119,11 +121,11 @@ public class TeamFoulsTests : BunitContext
 
     private static void AssertNoFoul(IElement element)
     {
-        Assert.Matches("background-color: (grey|darkred);", element.GetAttribute("style"));
+        Assert.That(element.GetAttribute("style"), Does.Match("background-color: (grey|darkred);"));
     }
 
     private void AssertFoul(IElement element)
     {
-        Assert.Matches("background-color: (white|red);", element.GetAttribute("style"));
+        Assert.That(element.GetAttribute("style"), Does.Match("background-color: (white|red);"));
     }
 }

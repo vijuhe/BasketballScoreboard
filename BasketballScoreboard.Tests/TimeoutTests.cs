@@ -1,19 +1,21 @@
 using Bunit;
+using NUnit.Framework;
 using TimeoutComponent = BasketballScoreboard.Components.Timeout;
 
 namespace BasketballScoreboard.Tests;
 
+[TestFixture]
 public class TimeoutTests : BunitContext
 {
-    [Fact]
+    [Test]
     public void TimeoutIsNotOngoingInTheBeginningOfTheGame()
     {
         var component = Render<TimeoutComponent>();
 
-        Assert.Contains("TIME OUT", component.Markup);
+        Assert.That(component.Markup, Does.Contain("TIME OUT"));
     }
 
-    [Fact]
+    [Test]
     public void TimeoutCanBeStarted()
     {
         var component = Render<TimeoutComponent>();
@@ -21,11 +23,11 @@ public class TimeoutTests : BunitContext
         var textElement = component.Find(".text");
         textElement.MouseDown();
 
-        Assert.DoesNotContain("TIME OUT", component.Markup);
-        Assert.Contains("01:00", component.Markup);
+        Assert.That(component.Markup, Does.Not.Contain("TIME OUT"));
+        Assert.That(component.Markup, Does.Contain("01:00"));
     }
 
-    [Fact]
+    [Test]
     public void TimeoutCanBeCancelled()
     {
         var component = Render<TimeoutComponent>();
@@ -34,6 +36,6 @@ public class TimeoutTests : BunitContext
         
         textElement.MouseDown();
 
-        Assert.Contains("TIME OUT", component.Markup);
+        Assert.That(component.Markup, Does.Contain("TIME OUT"));
     }
 }
